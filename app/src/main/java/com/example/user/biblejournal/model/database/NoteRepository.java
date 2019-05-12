@@ -1,23 +1,29 @@
-package com.example.user.biblejournal.database;
+package com.example.user.biblejournal.model.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+
+import java.util.List;
+
 public class NoteRepository {
     private final NoteDao noteDao;
+    private LiveData<List<NoteEntity>> notes;
 
     public NoteRepository(Context context) {
         noteDao = NoteDb.getInstance(context).noteDao();
+        notes = noteDao.getAllNotes();
     }
 
     public void insertNote(NoteEntity noteEntity) {
-        new InsertNoteAsyncTask(noteDao).doInBackground(noteEntity);
+        new InsertNoteAsyncTask(noteDao).execute(noteEntity);
     }
 
-    private class InsertNoteAsyncTask extends AsyncTask<NoteEntity, Void, Void> {
+    private static class InsertNoteAsyncTask extends AsyncTask<NoteEntity, Void, Void> {
         final NoteDao noteDao;
 
-        public InsertNoteAsyncTask(NoteDao noteDao) {
+        InsertNoteAsyncTask(NoteDao noteDao) {
             this.noteDao = noteDao;
         }
 
@@ -26,5 +32,9 @@ public class NoteRepository {
             noteDao.insertNote(noteEntities[0]);
             return null;
         }
+    }
+
+    public LiveData<List<NoteEntity>> getNotes() {
+        return notes;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.user.biblejournal.database;
+package com.example.user.biblejournal.model.database;
 
 
 
