@@ -2,4 +2,7 @@
     <string name="app_name">Bible Journal</string>
     <string name="note_item_title_hint">Title</string>
     <string name="note_item_content_hint">Topic notes…</string>
+
+    <string name="edit_note_menu_action_delete">Delete</string>
+    <string name="edit_note_menu_action_archive">Archive</string>
 </resources>

@@ -1,18 +1,17 @@
 package com.example.user.biblejournal.model.database;
 
 
-
-import java.util.List;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.List;
+
 @Dao
 public interface NoteDao {
-    @Query("SELECT id, title, content, dateCreated, dateEdited, tags FROM NoteEntity")
+    @Query("SELECT id, title, content, dateCreated, dateEdited, tags FROM NoteEntity WHERE state = 'ACTIVE'")
     LiveData<List<NoteEntity>> getAllNotes();
 
     @Insert

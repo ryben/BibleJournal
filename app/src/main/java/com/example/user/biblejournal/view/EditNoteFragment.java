@@ -3,18 +3,21 @@ package com.example.user.biblejournal.view;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.user.biblejournal.R;
 import com.example.user.biblejournal.model.database.NoteEntity;
 import com.example.user.biblejournal.viewmodel.NoteViewModel;
+import com.google.android.material.bottomappbar.BottomAppBar;
 
 import java.util.Objects;
 
@@ -43,6 +46,8 @@ public class EditNoteFragment extends Fragment {
 
     public interface EditNoteListener {
         void saveNote(NoteEntity noteEntity);
+        void deleteNote(NoteEntity noteEntity);
+        void archiveNote(NoteEntity noteEntity);
     }
 
     @Override
@@ -74,11 +79,14 @@ public class EditNoteFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Request focus and show soft keyboard automatically
         return inflater.inflate(R.layout.fragment_edit_note, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         final NoteEntity currentNote = noteViewModel.getCurrentNote();
 
         editTitle = view.findViewById(R.id.note_item_title);
@@ -87,7 +95,9 @@ public class EditNoteFragment extends Fragment {
         editTitle.setText(currentNote.getTitle());
         editContent.setText(currentNote.getContent());
 
-        view.findViewById(R.id.bottom_app_bar).setOnClickListener(new View.OnClickListener() {
+        // Setup Bottom App Bar
+        BottomAppBar bottomAppBar = view.findViewById(R.id.bottom_app_bar);
+        bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 currentNote.setTitle(editTitle.getText().toString());
@@ -96,5 +106,21 @@ public class EditNoteFragment extends Fragment {
                 editNoteListener.saveNote(noteViewModel.getCurrentNote());
             }
         });
+        bottomAppBar.inflateMenu(R.menu.edit_note_menu);
+        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_archive:
+                        editNoteListener.archiveNote(noteViewModel.getCurrentNote());
+                        break;
+                    case R.id.action_delete:
+                        editNoteListener.deleteNote(noteViewModel.getCurrentNote());
+                        break;
+                }
+                return true;
+            }
+        });
     }
+
 }
