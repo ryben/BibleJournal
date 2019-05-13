@@ -1,15 +1,16 @@
 package com.example.user.biblejournal.model.database;
 
 
-import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.example.user.biblejournal.model.note.NoteState;
+
 @Entity
 public class NoteEntity {
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    private int id;
 
     @ColumnInfo
     private String title;
@@ -26,8 +27,27 @@ public class NoteEntity {
     @ColumnInfo
     private String tags;
 
+    @ColumnInfo
+    private String state;
+
+    public static NoteEntity newInstance() {
+        NoteEntity newNote = new NoteEntity();
+
+        newNote.setTitle("");
+        newNote.setDateEdited("");
+        newNote.setContent("");
+        newNote.setDateCreated("");
+        newNote.setState(NoteState.NEW.toString());
+
+        return newNote;
+    }
+
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -68,5 +88,13 @@ public class NoteEntity {
 
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

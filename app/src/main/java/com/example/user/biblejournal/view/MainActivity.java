@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.example.user.biblejournal.R;
 import com.example.user.biblejournal.model.database.NoteEntity;
+import com.example.user.biblejournal.model.note.NoteState;
 import com.example.user.biblejournal.viewmodel.NoteViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,13 +23,18 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
         noteViewModel.init(this);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_placeholder, new NoteListFragment())
+                .add(R.id.fragment_placeholder, NoteListFragment.newInstance())
                 .commit();
     }
 
     @Override
     public void saveNote(NoteEntity noteEntity) {
-        noteViewModel.getNoteRepository().insertNote(noteEntity);
+        if (NoteState.NEW.toString().equals(noteEntity.getState())) {
+            noteEntity.setState(NoteState.ACTIVE.toString());
+            noteViewModel.getNoteRepository().insertNote(noteEntity);
+        } else {
+            noteViewModel.getNoteRepository().updateNote(noteEntity);
+        }
         Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show();
     }
 
@@ -36,8 +42,19 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
     public void startNewNote() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_placeholder, new EditNoteFragment())
+                .replace(R.id.fragment_placeholder, EditNoteFragment.newInstance())
                 .addToBackStack(null)
                 .commit();
     }
+
+    @Override
+    public void editNote(int noteId) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_placeholder, EditNoteFragment.newInstance(noteId))
+                .addToBackStack(null)
+                .commit();
+    }
+
+
 }

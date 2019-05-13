@@ -25,18 +25,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class NoteListFragment extends Fragment {
-    public interface NoteListListener {
-        void startNewNote();
-    }
-
+public class NoteListFragment extends Fragment implements NoteListAdapter.ListItemListener {
     private NoteListListener noteListListener;
     private FloatingActionButton floatingActionButton;
     private NoteViewModel noteViewModel;
     private RecyclerView noteListRecyclerView;
 
-    public NoteListFragment() {
-        // Required empty public constructor
+    public static NoteListFragment newInstance() {
+        return new NoteListFragment();
+    }
+
+    public interface NoteListListener {
+        void startNewNote();
+        void editNote(int noteId);
     }
 
     @Override
@@ -74,7 +75,7 @@ public class NoteListFragment extends Fragment {
         noteViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(NoteViewModel.class);
         LiveData<List<NoteEntity>> notes = noteViewModel.getNotes();
 
-        final NoteListAdapter noteListAdapter = new NoteListAdapter(notes.getValue());
+        final NoteListAdapter noteListAdapter = new NoteListAdapter(notes.getValue(), this);
         noteListRecyclerView.setAdapter(noteListAdapter);
         noteListRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
@@ -84,7 +85,13 @@ public class NoteListFragment extends Fragment {
                 noteListAdapter.setNotes(noteEntities);
             }
         });
-
-
     }
+
+
+    @Override
+    public void onItemClick(int noteId) {
+        noteListListener.editNote(noteId);
+    }
+
+
 }

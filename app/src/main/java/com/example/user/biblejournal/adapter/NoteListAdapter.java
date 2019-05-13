@@ -16,9 +16,11 @@ import java.util.List;
 
 public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyViewHolder> {
     private List<NoteEntity> notes;
+    private ListItemListener listItemListener;
 
-    public NoteListAdapter(List<NoteEntity> notes) {
+    public NoteListAdapter(List<NoteEntity> notes, ListItemListener listItemListener) {
         setNotes(notes);
+        this.listItemListener = listItemListener;
     }
 
     @NonNull
@@ -56,7 +58,11 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
         }
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    public interface ListItemListener {
+        void onItemClick(int noteId);
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView textTitle;
         TextView textTags;
         TextView textCreationTime;
@@ -66,6 +72,13 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
             textTitle = itemView.findViewById(R.id.note_item_title);
             textTags = itemView.findViewById(R.id.note_item_tags);
             textCreationTime = itemView.findViewById(R.id.note_item_creation_time);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            listItemListener.onItemClick(notes.get(getAdapterPosition()).getId());
         }
     }
 }
