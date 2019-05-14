@@ -11,7 +11,7 @@ import java.util.List;
 
 @Dao
 public interface NoteDao {
-    @Query("SELECT id, title, content, dateCreated, dateEdited, tags FROM NoteEntity WHERE state = 'ACTIVE'")
+    @Query("SELECT id, title, content, dateCreated, dateEdited, state, tags FROM NoteEntity WHERE state = 'ACTIVE'")
     LiveData<List<NoteEntity>> getAllNotes();
 
     @Insert
@@ -20,6 +20,6 @@ public interface NoteDao {
     @Update
     void updateNote(NoteEntity noteEntity);
 
-    @Query("SELECT id, title, content, tags, dateCreated, dateEdited from NoteEntity where id = :id")
+    @Query("SELECT id, title, content, dateCreated, dateEdited, state, tags from NoteEntity where id = :id")
     NoteEntity getNoteById(int id);
 }
