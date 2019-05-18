@@ -33,7 +33,6 @@ public class EditNoteFragment extends Fragment {
         return new EditNoteFragment();
     }
 
-
     public static EditNoteFragment newInstance(int noteId) {
         EditNoteFragment editNoteFragment = newInstance();
 
@@ -45,8 +44,10 @@ public class EditNoteFragment extends Fragment {
     }
 
     public interface EditNoteListener {
-        void saveNote(NoteEntity noteEntity);
+        void saveNote(NoteEntity noteEntity, boolean closeFragment);
+
         void deleteNote(NoteEntity noteEntity);
+
         void archiveNote(NoteEntity noteEntity);
     }
 
@@ -100,10 +101,8 @@ public class EditNoteFragment extends Fragment {
         bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentNote.setTitle(editTitle.getText().toString());
-                currentNote.setContent(editContent.getText().toString());
-
-                editNoteListener.saveNote(noteViewModel.getCurrentNote());
+                recordCurrentNote();
+                editNoteListener.saveNote(noteViewModel.getCurrentNote(), true);
             }
         });
         bottomAppBar.inflateMenu(R.menu.edit_note_menu);
@@ -123,4 +122,23 @@ public class EditNoteFragment extends Fragment {
         });
     }
 
+    private void recordCurrentNote() {
+        final NoteEntity currentNote = noteViewModel.getCurrentNote();
+        currentNote.setTitle(editTitle.getText().toString());
+        currentNote.setContent(editContent.getText().toString());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        recordCurrentNote();
+        editNoteListener.saveNote(noteViewModel.getCurrentNote(), false);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        recordCurrentNote();
+        editNoteListener.saveNote(noteViewModel.getCurrentNote(), false);
+    }
 }

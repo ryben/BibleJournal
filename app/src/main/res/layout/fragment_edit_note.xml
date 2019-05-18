@@ -25,10 +25,11 @@
                 android:id="@+id/note_item_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-smallcaps"
+                android:fontFamily="serif-monospace"
                 android:gravity="center"
                 android:hint="@string/note_item_title_hint"
                 android:inputType="textMultiLine|textNoSuggestions"
+                android:textSize="20sp"
                 tools:text="Note Title" />
 
             <TextView
@@ -46,11 +47,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
+                android:fontFamily="serif-monospace"
                 android:gravity="top"
                 android:hint="@string/note_item_content_hint"
                 android:inputType="textNoSuggestions|textMultiLine"
-                android:textColor="#AAA"
-                android:textSize="15sp"
+                android:textColor="#DDD"
+                android:textSize="17sp"
                 tools:text="Note Content" />
 
 
@@ -77,13 +79,13 @@
             app:fabCradleMargin="7dp"
             app:navigationIcon="@drawable/ic_save_yellow_36dp" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_view_array_yellow_36dp"
-            app:backgroundTint="#cac6b2"
-            app:fabCustomSize="45dp"
-            app:layout_anchor="@id/bottom_app_bar" />
+        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/ic_view_array_yellow_36dp"-->
+            <!--app:backgroundTint="#cac6b2"-->
+            <!--app:fabCustomSize="45dp"-->
+            <!--app:layout_anchor="@id/bottom_app_bar" />-->
 
         <TextView
             android:layout_width="wrap_content"

@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
     }
 
     @Override
-    public void saveNote(NoteEntity noteEntity) {
+    public void saveNote(NoteEntity noteEntity, boolean closeFragment) {
         if (NoteState.NEW.toString().equals(noteEntity.getState())) {
             noteEntity.setState(NoteState.ACTIVE.toString());
             noteViewModel.getNoteRepository().insertNote(noteEntity);
@@ -36,8 +36,9 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
             noteViewModel.getNoteRepository().updateNote(noteEntity);
         }
 
-        getSupportFragmentManager().popBackStack();
-        Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show();
+        if (closeFragment) {
+            getSupportFragmentManager().popBackStack();
+        }
     }
 
     @Override

@@ -6,15 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.user.biblejournal.R;
-import com.example.user.biblejournal.adapter.NoteListAdapter;
-import com.example.user.biblejournal.model.database.NoteEntity;
-import com.example.user.biblejournal.viewmodel.NoteViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.List;
-import java.util.Objects;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -23,6 +14,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.user.biblejournal.R;
+import com.example.user.biblejournal.adapter.NoteListAdapter;
+import com.example.user.biblejournal.model.database.NoteEntity;
+import com.example.user.biblejournal.viewmodel.NoteViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
+import java.util.Objects;
 
 
 public class NoteListFragment extends Fragment implements NoteListAdapter.ListItemListener {
@@ -37,6 +37,7 @@ public class NoteListFragment extends Fragment implements NoteListAdapter.ListIt
 
     public interface NoteListListener {
         void startNewNote();
+
         void editNote(int noteId);
     }
 
