@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
     public void saveNote(NoteEntity noteEntity, boolean closeFragment) {
         if (NoteState.NEW.toString().equals(noteEntity.getState())) {
 
-            if ("".equals(noteEntity.getTitle()) || "".equals(noteEntity.getContent())) {
+            if ("".equals(noteEntity.getTitle()) && "".equals(noteEntity.getContent())) {
                 Toast.makeText(this, "Empty note discarded", Toast.LENGTH_SHORT).show();
             } else {
                 noteEntity.setState(NoteState.ACTIVE.toString());
