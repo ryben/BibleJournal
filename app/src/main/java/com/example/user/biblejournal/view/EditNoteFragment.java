@@ -18,6 +18,8 @@ import com.example.user.biblejournal.R;
 import com.example.user.biblejournal.model.database.NoteEntity;
 import com.example.user.biblejournal.viewmodel.NoteViewModel;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Objects;
 
@@ -28,6 +30,8 @@ public class EditNoteFragment extends Fragment {
     private EditNoteListener editNoteListener;
     private EditText editTitle;
     private EditText editContent;
+    private FloatingActionButton floatingActionButton;
+    private View bibleReaderMini;
 
     public static EditNoteFragment newInstance() {
         return new EditNoteFragment();
@@ -95,6 +99,17 @@ public class EditNoteFragment extends Fragment {
 
         editTitle.setText(currentNote.getTitle());
         editContent.setText(currentNote.getContent());
+
+        floatingActionButton = view.findViewById(R.id.floating_action_button);
+        bibleReaderMini = view.findViewById(R.id.bible_mini_bottom_sheet);
+        final BottomSheetBehavior behavior = BottomSheetBehavior.from(bibleReaderMini);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
 
         // Setup Bottom App Bar
         BottomAppBar bottomAppBar = view.findViewById(R.id.bottom_app_bar);

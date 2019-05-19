@@ -1,102 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@id/bottom_app_bar_layout"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingStart="10dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="10dp">
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toTopOf="@id/bottom_app_bar_layout"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/note_item_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="serif-monospace"
-                android:gravity="center"
-                android:hint="@string/note_item_title_hint"
-                android:inputType="textMultiLine|textNoSuggestions"
-                android:textSize="20sp"
-                tools:text="Note Title" />
-
-            <TextView
-                android:id="@+id/note_item_creation_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingBottom="10dp"
-                android:textColor="#666"
-                android:textSize="12sp"
-                tools:text="May 12, 2019  8:00 AM" />
-
-            <EditText
-                android:id="@+id/note_item_content"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@null"
-                android:fontFamily="serif-monospace"
-                android:gravity="top"
-                android:hint="@string/note_item_content_hint"
-                android:inputType="textNoSuggestions|textMultiLine"
-                android:textColor="#DDD"
-                android:textSize="17sp"
-                tools:text="Note Content" />
+                android:orientation="vertical"
+                android:paddingStart="10dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="10dp">
+
+                <EditText
+                    android:id="@+id/note_item_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:hint="@string/note_item_title_hint"
+                    android:inputType="textMultiLine|textNoSuggestions"
+                    android:textSize="20sp"
+                    tools:text="Note Title" />
+
+                <TextView
+                    android:id="@+id/note_item_creation_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingBottom="10dp"
+                    android:textColor="#666"
+                    android:textSize="12sp"
+                    tools:text="May 12, 2019  8:00 AM" />
+
+                <EditText
+                    android:id="@+id/note_item_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="top"
+                    android:hint="@string/note_item_content_hint"
+                    android:inputType="textNoSuggestions|textMultiLine"
+                    android:textColor="#EEE"
+                    android:textSize="17sp"
+                    tools:text="Note Content" />
 
 
-        </LinearLayout>
+            </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/bottom_app_bar_layout"
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/bottom_app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bottom_app_bar"
+                style="@style/Widget.MaterialComponents.BottomAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="#111"
+                android:clickable="true"
+                android:focusable="true"
+                app:fabAnimationMode="scale"
+                app:fabCradleMargin="7dp"
+                app:navigationIcon="@drawable/ic_save_yellow_36dp" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floating_action_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_view_array_yellow_36dp"
+                app:backgroundTint="#cac6b2"
+                app:fabCustomSize="45dp"
+                app:layout_anchor="@id/bottom_app_bar" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:padding="5dp"
+                android:textColor="#555"
+                android:textSize="12sp"
+                tools:text="Edited Today 8:20 am" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bible_mini_bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="170dp"
+        android:layout_margin="5dp"
+        android:background="#112"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottom_app_bar"
-            style="@style/Widget.MaterialComponents.BottomAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="#111"
-            android:clickable="true"
-            android:focusable="true"
-            app:fabAnimationMode="scale"
-            app:fabCradleMargin="7dp"
-            app:navigationIcon="@drawable/ic_save_yellow_36dp" />
-
-        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@drawable/ic_view_array_yellow_36dp"-->
-            <!--app:backgroundTint="#cac6b2"-->
-            <!--app:fabCustomSize="45dp"-->
-            <!--app:layout_anchor="@id/bottom_app_bar" />-->
-
         <TextView
+            android:id="@+id/verse_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:padding="5dp"
-            android:textColor="#555"
-            android:textSize="12sp"
-            tools:text="Edited Today 8:20 am" />
+            android:fontFamily="sans-serif-medium"
+            android:textColor="#DDA"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Apocalipsis 22:21" />
 
+        <TextView
+            android:id="@+id/bible_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="#DDA"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Version" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <TextView
+            android:id="@+id/verse_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.65"
+            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

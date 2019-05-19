@@ -30,8 +30,14 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
     @Override
     public void saveNote(NoteEntity noteEntity, boolean closeFragment) {
         if (NoteState.NEW.toString().equals(noteEntity.getState())) {
-            noteEntity.setState(NoteState.ACTIVE.toString());
-            noteViewModel.getNoteRepository().insertNote(noteEntity);
+
+            if ("".equals(noteEntity.getTitle()) || "".equals(noteEntity.getContent())) {
+                Toast.makeText(this, "Empty note discarded", Toast.LENGTH_SHORT).show();
+            } else {
+                noteEntity.setState(NoteState.ACTIVE.toString());
+                noteViewModel.getNoteRepository().insertNote(noteEntity);
+            }
+
         } else {
             noteViewModel.getNoteRepository().updateNote(noteEntity);
         }

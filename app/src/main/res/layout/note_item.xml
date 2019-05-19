@@ -10,6 +10,7 @@
     android:clickable="true"
     android:focusable="true">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,7 +21,7 @@
             android:id="@+id/note_item_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="serif-monospace"
+            android:fontFamily="sans-serif-light"
             android:paddingBottom="5dp"
             android:textAlignment="center"
             android:textColor="#000"
