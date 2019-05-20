@@ -21,9 +21,10 @@ public class NoteRepository {
 
     public interface NotesRepositoryListener {
         void onNotesRead(List<NoteEntity> noteEntities);
+        void onNoteFetchedById(NoteEntity noteEntity);
     }
 
-    public void startReadAllNotes(NotesRepositoryListener notesRepositoryListener) {
+    public void executeReadAllNotes(NotesRepositoryListener notesRepositoryListener) {
         new GetAllNotesAsyncTask(noteDao, notesRepositoryListener).execute();
     }
 
@@ -42,14 +43,8 @@ public class NoteRepository {
 
     // TODO: Use callback functions or RxJava
 
-    public NoteEntity getNoteById(int id) {
-        NoteEntity noteEntity = null;
-        try {
-            noteEntity = new GetNoteByIdAsyncTask(noteDao).execute(id).get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace(); // TODO: Proper error handling
-        }
-        return noteEntity;
+    public void executeGetNoteById(int id, NotesRepositoryListener notesRepositoryListener) {
+        new GetNoteByIdAsyncTask(noteDao, notesRepositoryListener).execute(id);
     }
 
     public VerseEntity getVerseById(int book, int chapter, int verse) {
@@ -102,14 +97,23 @@ public class NoteRepository {
     private static class GetNoteByIdAsyncTask extends AsyncTask<Integer, Void, NoteEntity> {
 
         private NoteDao mAsyncTaskDao;
+        private NotesRepositoryListener notesRepositoryListener;
 
-        GetNoteByIdAsyncTask(NoteDao dao) {
+        GetNoteByIdAsyncTask(NoteDao dao,  NotesRepositoryListener notesRepositoryListener) {
             mAsyncTaskDao = dao;
+            this.notesRepositoryListener = notesRepositoryListener;
         }
 
         @Override
         protected NoteEntity doInBackground(final Integer... params) {
             return mAsyncTaskDao.getNoteById(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(NoteEntity noteEntity) {
+            super.onPostExecute(noteEntity);
+
+            notesRepositoryListener.onNoteFetchedById(noteEntity);
         }
     }
 

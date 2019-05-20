@@ -14,10 +14,11 @@ import com.example.user.biblejournal.model.note.NoteState;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class NoteViewModel extends AndroidViewModel implements NoteRepository.NotesRepositoryListener {
     private NoteRepository noteRepository;
-    private NoteEntity currentNote;
+    private MediatorLiveData<NoteEntity> currentNote;
     private MediatorLiveData<List<NoteEntity>> allNotes;
 
     public NoteViewModel(Application app) {
@@ -27,10 +28,12 @@ public class NoteViewModel extends AndroidViewModel implements NoteRepository.No
         List<NoteEntity> noteEntities = new ArrayList<>();
         allNotes = new MediatorLiveData<>();
         allNotes.setValue(noteEntities);
+
+        currentNote = new MediatorLiveData<>();
     }
 
     public void readAllNotes() {
-        noteRepository.startReadAllNotes(this);
+        noteRepository.executeReadAllNotes(this);
     }
 
     public LiveData<List<NoteEntity>> getAllNotes() {
@@ -42,36 +45,41 @@ public class NoteViewModel extends AndroidViewModel implements NoteRepository.No
         allNotes.setValue(noteEntities);
     }
 
-    public NoteEntity getCurrentNote() {
+    @Override
+    public void onNoteFetchedById(NoteEntity noteEntity) {
+        currentNote.setValue(noteEntity);
+    }
+
+    public LiveData<NoteEntity> getCurrentNote() {
         return currentNote;
     }
 
     public void startNote(@Nullable Integer noteId) {
         if (null == noteId) {
-            currentNote = NoteEntity.newInstance();
+            currentNote.setValue(NoteEntity.newInstance());
         } else {
-            currentNote = noteRepository.getNoteById(noteId);
+            noteRepository.executeGetNoteById(noteId, this);
         }
     }
 
     public void saveNote() {
-        if (NoteState.NEW.toString().equals(currentNote.getState())) {
-            if (!"".equals(currentNote.getTitle()) || !"".equals(currentNote.getContent())) {
-                noteRepository.insertNote(currentNote);
+        if (NoteState.NEW.toString().equals(Objects.requireNonNull(currentNote.getValue()).getState())) {
+            if (!"".equals(currentNote.getValue().getTitle()) || !"".equals(currentNote.getValue().getContent())) {
+                noteRepository.insertNote(currentNote.getValue());
             }
         } else {
-            noteRepository.updateNote(currentNote);
+            noteRepository.updateNote(currentNote.getValue());
         }
     }
 
     public void deleteNote() {
-        noteRepository.updateNoteState(currentNote, NoteState.DELETED);
-        noteRepository.updateNote(currentNote);
+        noteRepository.updateNoteState(currentNote.getValue(), NoteState.DELETED);
+        noteRepository.updateNote(currentNote.getValue());
     }
 
     public void archiveNote() {
-        noteRepository.updateNoteState(currentNote, NoteState.ARCHIVED);
-        noteRepository.updateNote(currentNote);
+        noteRepository.updateNoteState(currentNote.getValue(), NoteState.ARCHIVED);
+        noteRepository.updateNote(currentNote.getValue());
     }
 
 }
