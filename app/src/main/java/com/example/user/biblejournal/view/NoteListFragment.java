@@ -36,9 +36,7 @@ public class NoteListFragment extends Fragment implements NoteListAdapter.ListIt
     }
 
     public interface NoteListListener {
-        void startNewNote();
-
-        void editNote(int noteId);
+        void startEditNote(Integer noteId);
     }
 
     @Override
@@ -69,7 +67,7 @@ public class NoteListFragment extends Fragment implements NoteListAdapter.ListIt
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                noteListListener.startNewNote();
+                noteListListener.startEditNote(null);
             }
         });
 
@@ -91,7 +89,7 @@ public class NoteListFragment extends Fragment implements NoteListAdapter.ListIt
 
     @Override
     public void onItemClick(int noteId) {
-        noteListListener.editNote(noteId);
+        noteListListener.startEditNote(noteId);
     }
 
 

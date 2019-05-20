@@ -3,24 +3,32 @@ package com.example.user.biblejournal.model.database;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import androidx.lifecycle.LiveData;
-
 import com.example.user.biblejournal.model.note.NoteState;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class NoteRepository {
     private final NoteDao noteDao;
     private final VerseDao verseDao;
-    private LiveData<List<NoteEntity>> notes;
 
     // TODO: Proper achitecture of Repository
     public NoteRepository(Context context) {
         AppDb db = AppDb.getInstance(context);
         noteDao = db.noteDao();
         verseDao = db.verseDao();
-        notes = noteDao.getAllNotes();
+    }
+
+    public List<NoteEntity> getNotes() {
+        List<NoteEntity> allNotes = new ArrayList<>();
+        try {
+            allNotes = new GetAllNotesAsyncTask(noteDao).execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return allNotes;
     }
 
     public void updateNoteState(NoteEntity noteEntity, NoteState newState) {
@@ -37,26 +45,26 @@ public class NoteRepository {
     }
 
     public NoteEntity getNoteById(int id) {
-        NoteEntity noteEntity;
+        NoteEntity noteEntity = null;
         try {
             noteEntity = new GetNoteByIdAsyncTask(noteDao).execute(id).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace(); // TODO: Proper error handling
-            throw new RuntimeException("Failed to fetch note with id " + id);
         }
         return noteEntity;
     }
 
     public VerseEntity getVerseById(int book, int chapter, int verse) {
-        VerseEntity VerseEntity;
+        VerseEntity verseEntity = null;
         try {
-            VerseEntity = new GetVerseByIdAsyncTask(verseDao).execute(book, chapter, verse).get();
+            verseEntity = new GetVerseByIdAsyncTask(verseDao).execute(book, chapter, verse).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace(); // TODO: Proper error handling
-            throw new RuntimeException("Failed to fetch verse with Book:" + book + ", Chapter:" + chapter + ", Verse:" + verse);
         }
-        return VerseEntity;
+        return verseEntity;
     }
+
+    // TODO: Use callback functions or RxJava
 
     private static class GetVerseByIdAsyncTask extends AsyncTask<Integer, Void, VerseEntity> {
 
@@ -69,6 +77,20 @@ public class NoteRepository {
         @Override
         protected VerseEntity doInBackground(final Integer... params) {
             return mAsyncTaskDao.getVerse(params[0], params[1], params[2]);
+        }
+    }
+
+    private static class GetAllNotesAsyncTask extends AsyncTask<Void, Void, List<NoteEntity>> {
+
+        private NoteDao mAsyncTaskDao;
+
+        GetAllNotesAsyncTask(NoteDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected List<NoteEntity> doInBackground(Void... voids) {
+            return mAsyncTaskDao.getAllNotes();
         }
     }
 
@@ -113,9 +135,5 @@ public class NoteRepository {
             noteDao.updateNote(params[0]);
             return null;
         }
-    }
-
-    public LiveData<List<NoteEntity>> getNotes() {
-        return notes;
     }
 }

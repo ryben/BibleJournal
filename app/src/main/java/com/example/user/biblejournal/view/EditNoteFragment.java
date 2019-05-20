@@ -34,22 +34,20 @@ public class EditNoteFragment extends Fragment {
     private FloatingActionButton floatingActionButton;
     private View bibleReaderMini;
 
-    public static EditNoteFragment newInstance() {
-        return new EditNoteFragment();
-    }
+    public static EditNoteFragment newInstance(@Nullable Integer noteId) {
+        EditNoteFragment editNoteFragment = new EditNoteFragment();
 
-    public static EditNoteFragment newInstance(int noteId) {
-        EditNoteFragment editNoteFragment = newInstance();
-
-        Bundle args = new Bundle();
-        args.putInt(EditNoteFragment.ARG_NOTE_ID_KEY, noteId);
-        editNoteFragment.setArguments(args);
+        if (null != noteId) {
+            Bundle args = new Bundle();
+            args.putInt(EditNoteFragment.ARG_NOTE_ID_KEY, noteId);
+            editNoteFragment.setArguments(args);
+        }
 
         return editNoteFragment;
     }
 
     public interface EditNoteListener {
-        void goBack();
+        void backPreviousScreen();
     }
 
     @Override
@@ -70,11 +68,12 @@ public class EditNoteFragment extends Fragment {
         noteViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(NoteViewModel.class);
 
         Bundle arguments = getArguments();
-        if (null == arguments) {
-            noteViewModel.setCurrentNote(NoteEntity.newInstance());
-        } else {
-            noteViewModel.setCurrentNote(noteViewModel.queryNoteById(arguments.getInt(ARG_NOTE_ID_KEY)));
+        Integer noteId = null;
+        if (null != arguments) {
+            noteId = arguments.getInt(ARG_NOTE_ID_KEY);
         }
+
+        noteViewModel.startNote(noteId);
     }
 
     @Nullable
@@ -103,7 +102,22 @@ public class EditNoteFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                floatingActionButton.hide();
                 behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
+
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    floatingActionButton.show();
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
             }
         });
 
@@ -113,8 +127,8 @@ public class EditNoteFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 recordCurrentNote();
-                noteViewModel.saveNote(noteViewModel.getCurrentNote());
-                editNoteListener.goBack();
+                noteViewModel.saveNote();
+                editNoteListener.backPreviousScreen();
             }
         });
         bottomAppBar.inflateMenu(R.menu.edit_note_menu);
@@ -123,12 +137,12 @@ public class EditNoteFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_archive:
-                        noteViewModel.archiveNote(noteViewModel.getCurrentNote());
-                        editNoteListener.goBack();
+                        noteViewModel.archiveNote();
+                        editNoteListener.backPreviousScreen();
                         break;
                     case R.id.action_delete:
-                        noteViewModel.deleteNote(noteViewModel.getCurrentNote());
-                        editNoteListener.goBack();
+                        noteViewModel.deleteNote();
+                        editNoteListener.backPreviousScreen();
                         break;
                 }
 
@@ -148,13 +162,13 @@ public class EditNoteFragment extends Fragment {
     public void onPause() {
         super.onPause();
         recordCurrentNote();
-        noteViewModel.saveNote(noteViewModel.getCurrentNote());
+        noteViewModel.saveNote();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         recordCurrentNote();
-        noteViewModel.saveNote(noteViewModel.getCurrentNote());
+        noteViewModel.saveNote();
     }
 }

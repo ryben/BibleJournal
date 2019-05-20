@@ -30,6 +30,10 @@ public class NoteEntity {
     @ColumnInfo
     private String state;
 
+    public NoteEntity() {
+
+    }
+
     public static NoteEntity newInstance() {
         NoteEntity newNote = new NoteEntity();
 
