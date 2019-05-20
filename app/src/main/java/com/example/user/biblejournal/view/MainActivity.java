@@ -1,9 +1,11 @@
 package com.example.user.biblejournal.view;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.user.biblejournal.BuildConfig;
 import com.example.user.biblejournal.R;
 
 public class MainActivity extends AppCompatActivity implements EditNoteFragment.EditNoteListener, NoteListFragment.NoteListListener {
@@ -12,6 +14,14 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectDiskWrites()
+                    .detectDiskReads()
+                    .penaltyDialog()
+                    .build());
+        }
 
         if (null == savedInstanceState) {
             getSupportFragmentManager().beginTransaction()

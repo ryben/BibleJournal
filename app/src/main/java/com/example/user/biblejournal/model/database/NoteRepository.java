@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 
 import com.example.user.biblejournal.model.note.NoteState;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -15,20 +14,17 @@ public class NoteRepository {
 
     // TODO: Proper achitecture of Repository
     public NoteRepository(Context context) {
-        AppDb db = AppDb.getInstance(context);
+        AppDb db = AppDb.getInstance(context); // TODO: Use dependency injection
         noteDao = db.noteDao();
         verseDao = db.verseDao();
     }
 
-    public List<NoteEntity> getNotes() {
-        List<NoteEntity> allNotes = new ArrayList<>();
-        try {
-            allNotes = new GetAllNotesAsyncTask(noteDao).execute().get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+    public interface NotesRepositoryListener {
+        void onNotesRead(List<NoteEntity> noteEntities);
+    }
 
-        return allNotes;
+    public void startReadAllNotes(NotesRepositoryListener notesRepositoryListener) {
+        new GetAllNotesAsyncTask(noteDao, notesRepositoryListener).execute();
     }
 
     public void updateNoteState(NoteEntity noteEntity, NoteState newState) {
@@ -43,6 +39,8 @@ public class NoteRepository {
     public void updateNote(NoteEntity noteEntity) {
         new UpdateNoteAsyncTask(noteDao).execute(noteEntity);
     }
+
+    // TODO: Use callback functions or RxJava
 
     public NoteEntity getNoteById(int id) {
         NoteEntity noteEntity = null;
@@ -64,7 +62,6 @@ public class NoteRepository {
         return verseEntity;
     }
 
-    // TODO: Use callback functions or RxJava
 
     private static class GetVerseByIdAsyncTask extends AsyncTask<Integer, Void, VerseEntity> {
 
@@ -81,16 +78,24 @@ public class NoteRepository {
     }
 
     private static class GetAllNotesAsyncTask extends AsyncTask<Void, Void, List<NoteEntity>> {
-
         private NoteDao mAsyncTaskDao;
+        private NotesRepositoryListener notesRepositoryListener;
 
-        GetAllNotesAsyncTask(NoteDao dao) {
+        GetAllNotesAsyncTask(NoteDao dao, NotesRepositoryListener notesRepositoryListener) {
             mAsyncTaskDao = dao;
+            this.notesRepositoryListener = notesRepositoryListener;
         }
 
         @Override
         protected List<NoteEntity> doInBackground(Void... voids) {
             return mAsyncTaskDao.getAllNotes();
+        }
+
+        @Override
+        protected void onPostExecute(List<NoteEntity> noteEntities) {
+            super.onPostExecute(noteEntities);
+
+            notesRepositoryListener.onNotesRead(noteEntities);
         }
     }
 

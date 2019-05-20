@@ -72,7 +72,7 @@ public class NoteListFragment extends Fragment implements NoteListAdapter.ListIt
         });
 
         noteViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(NoteViewModel.class);
-        LiveData<List<NoteEntity>> notes = noteViewModel.getNotes();
+        LiveData<List<NoteEntity>> notes = noteViewModel.getAllNotes();
 
         final NoteListAdapter noteListAdapter = new NoteListAdapter(notes.getValue(), this);
         noteListRecyclerView.setAdapter(noteListAdapter);
@@ -84,8 +84,9 @@ public class NoteListFragment extends Fragment implements NoteListAdapter.ListIt
                 noteListAdapter.setNotes(noteEntities);
             }
         });
-    }
 
+        noteViewModel.readAllNotes();
+    }
 
     @Override
     public void onItemClick(int noteId) {
