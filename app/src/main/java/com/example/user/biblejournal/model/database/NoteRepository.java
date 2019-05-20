@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.user.biblejournal.model.note.NoteState;
+
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -21,7 +23,12 @@ public class NoteRepository {
         notes = noteDao.getAllNotes();
     }
 
+    public void updateNoteState(NoteEntity noteEntity, NoteState newState) {
+        noteEntity.setState(newState.toString());
+    }
+
     public void insertNote(NoteEntity noteEntity) {
+        noteEntity.setState(NoteState.ACTIVE.toString());
         new InsertNoteAsyncTask(noteDao).execute(noteEntity);
     }
 

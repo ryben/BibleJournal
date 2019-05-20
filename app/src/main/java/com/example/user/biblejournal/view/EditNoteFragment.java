@@ -24,10 +24,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.Objects;
 
 public class EditNoteFragment extends Fragment {
+    private EditNoteListener editNoteListener;
+
     private static final String ARG_NOTE_ID_KEY = "ARG_NOTE_ID";
 
     private NoteViewModel noteViewModel;
-    private EditNoteListener editNoteListener;
     private EditText editTitle;
     private EditText editContent;
     private FloatingActionButton floatingActionButton;
@@ -48,11 +49,7 @@ public class EditNoteFragment extends Fragment {
     }
 
     public interface EditNoteListener {
-        void saveNote(NoteEntity noteEntity, boolean closeFragment);
-
-        void deleteNote(NoteEntity noteEntity);
-
-        void archiveNote(NoteEntity noteEntity);
+        void goBack();
     }
 
     @Override
@@ -60,10 +57,9 @@ public class EditNoteFragment extends Fragment {
         super.onAttach(context);
 
         if (context instanceof EditNoteListener) {
-            editNoteListener = (EditNoteListener) context;
+            this.editNoteListener = (EditNoteListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " does not implement " + editNoteListener.getClass().getName());
+            throw new RuntimeException(context.getClass().getSimpleName() + " activity does not implement " + this.getClass().getSimpleName());
         }
     }
 
@@ -96,12 +92,12 @@ public class EditNoteFragment extends Fragment {
 
         editTitle = view.findViewById(R.id.note_item_title);
         editContent = view.findViewById(R.id.note_item_content);
+        floatingActionButton = view.findViewById(R.id.floating_action_button);
+        bibleReaderMini = view.findViewById(R.id.bible_mini_bottom_sheet);
 
         editTitle.setText(currentNote.getTitle());
         editContent.setText(currentNote.getContent());
 
-        floatingActionButton = view.findViewById(R.id.floating_action_button);
-        bibleReaderMini = view.findViewById(R.id.bible_mini_bottom_sheet);
         final BottomSheetBehavior behavior = BottomSheetBehavior.from(bibleReaderMini);
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +113,8 @@ public class EditNoteFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 recordCurrentNote();
-                editNoteListener.saveNote(noteViewModel.getCurrentNote(), true);
+                noteViewModel.saveNote(noteViewModel.getCurrentNote());
+                editNoteListener.goBack();
             }
         });
         bottomAppBar.inflateMenu(R.menu.edit_note_menu);
@@ -126,12 +123,16 @@ public class EditNoteFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_archive:
-                        editNoteListener.archiveNote(noteViewModel.getCurrentNote());
+                        noteViewModel.archiveNote(noteViewModel.getCurrentNote());
+                        editNoteListener.goBack();
                         break;
                     case R.id.action_delete:
-                        editNoteListener.deleteNote(noteViewModel.getCurrentNote());
+                        noteViewModel.deleteNote(noteViewModel.getCurrentNote());
+                        editNoteListener.goBack();
                         break;
                 }
+
+                // TODO: Add Toast to notify user about deletion/archival. Make view listen to event.
                 return true;
             }
         });
@@ -147,13 +148,13 @@ public class EditNoteFragment extends Fragment {
     public void onPause() {
         super.onPause();
         recordCurrentNote();
-        editNoteListener.saveNote(noteViewModel.getCurrentNote(), false);
+        noteViewModel.saveNote(noteViewModel.getCurrentNote());
     }
 
     @Override
     public void onStop() {
         super.onStop();
         recordCurrentNote();
-        editNoteListener.saveNote(noteViewModel.getCurrentNote(), false);
+        noteViewModel.saveNote(noteViewModel.getCurrentNote());
     }
 }

@@ -1,14 +1,11 @@
 package com.example.user.biblejournal.view;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.user.biblejournal.R;
-import com.example.user.biblejournal.model.database.NoteEntity;
-import com.example.user.biblejournal.model.note.NoteState;
 import com.example.user.biblejournal.viewmodel.NoteViewModel;
 
 public class MainActivity extends AppCompatActivity implements EditNoteFragment.EditNoteListener, NoteListFragment.NoteListListener {
@@ -28,44 +25,11 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
     }
 
     @Override
-    public void saveNote(NoteEntity noteEntity, boolean closeFragment) {
-        if (NoteState.NEW.toString().equals(noteEntity.getState())) {
-
-            if ("".equals(noteEntity.getTitle()) && "".equals(noteEntity.getContent())) {
-                Toast.makeText(this, "Empty note discarded", Toast.LENGTH_SHORT).show();
-            } else {
-                noteEntity.setState(NoteState.ACTIVE.toString());
-                noteViewModel.getNoteRepository().insertNote(noteEntity);
-            }
-
-        } else {
-            noteViewModel.getNoteRepository().updateNote(noteEntity);
-        }
-
-        if (closeFragment) {
-            getSupportFragmentManager().popBackStack();
-        }
-    }
-
-    @Override
-    public void deleteNote(NoteEntity noteEntity) {
-        noteEntity.setState(NoteState.DELETED.toString());
-        noteViewModel.getNoteRepository().updateNote(noteEntity);
-
+    public void goBack() {
+        // TODO: Use Jetpack Navigation component
         getSupportFragmentManager().popBackStack();
-        Toast.makeText(this, "Note deleted", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void archiveNote(NoteEntity noteEntity) {
-        noteEntity.setState(NoteState.ARCHIVED.toString());
-        noteViewModel.getNoteRepository().updateNote(noteEntity);
-
-        getSupportFragmentManager().popBackStack();
-        Toast.makeText(this, "Note archived", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void startNewNote() {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -74,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
                 .commit();
     }
 
-    @Override
     public void editNote(int noteId) {
         getSupportFragmentManager()
                 .beginTransaction()

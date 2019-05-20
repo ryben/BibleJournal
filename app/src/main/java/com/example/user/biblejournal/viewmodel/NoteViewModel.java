@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.example.user.biblejournal.model.database.NoteEntity;
 import com.example.user.biblejournal.model.database.NoteRepository;
+import com.example.user.biblejournal.model.note.NoteState;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -17,10 +18,6 @@ public class NoteViewModel extends ViewModel {
 
     public void init(Context context) {
         noteRepository = new NoteRepository(context);
-    }
-
-    public NoteRepository getNoteRepository() {
-        return noteRepository;
     }
 
     public LiveData<List<NoteEntity>> getNotes() {
@@ -37,5 +34,27 @@ public class NoteViewModel extends ViewModel {
 
     public NoteEntity queryNoteById(int noteId) {
         return noteRepository.getNoteById(noteId);
+    }
+
+
+    public void saveNote(NoteEntity noteEntity) {
+        if (NoteState.NEW.toString().equals(noteEntity.getState())) {
+            if (!"".equals(noteEntity.getTitle()) || !"".equals(noteEntity.getContent())) {
+                noteRepository.insertNote(noteEntity);
+            }
+        } else {
+            noteRepository.updateNote(noteEntity);
+        }
+    }
+
+
+    public void deleteNote(NoteEntity noteEntity) {
+        noteRepository.updateNoteState(noteEntity, NoteState.DELETED);
+        noteRepository.updateNote(noteEntity);
+    }
+
+    public void archiveNote(NoteEntity noteEntity) {
+        noteRepository.updateNoteState(noteEntity, NoteState.ARCHIVED);
+        noteRepository.updateNote(noteEntity);
     }
 }
