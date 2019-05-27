@@ -2,11 +2,15 @@ package com.example.user.biblejournal.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Spanned;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,9 +29,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Objects;
-import java.util.Observable;
 
-public class EditNoteFragment extends Fragment {
+public class EditNoteFragment extends Fragment implements MyClickableSpan.ClickableSpanListener {
     private EditNoteListener editNoteListener;
 
     private static final String ARG_NOTE_ID_KEY = "ARG_NOTE_ID";
@@ -37,6 +40,7 @@ public class EditNoteFragment extends Fragment {
     private EditText editContent;
     private FloatingActionButton floatingActionButton;
     private View bibleReaderMini;
+    private TextView textEditedDateTime;
 
     public static EditNoteFragment newInstance(@Nullable Integer noteId) {
         EditNoteFragment editNoteFragment = new EditNoteFragment();
@@ -50,9 +54,11 @@ public class EditNoteFragment extends Fragment {
         return editNoteFragment;
     }
 
+
     public interface EditNoteListener {
         void backPreviousScreen();
     }
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -87,14 +93,62 @@ public class EditNoteFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_edit_note, container, false);
     }
 
+    private void spanTextIfVerse(CharSequence s, int start, int count) { // TODO: To Move to model layer
+        int searchLength = 10;
+        int searchStart = start - searchLength;
+        int searchEnd = start + count;
+
+        if (searchStart < 0) {
+            searchStart = 0;
+        }
+
+
+        String searchText = s.subSequence(searchStart, searchEnd).toString();
+        String toSearch = "Verse";
+
+        if (searchText.contains(toSearch)) {
+            int spanStart = searchText.indexOf(toSearch) + searchStart;
+            int spanEnd = spanStart + toSearch.length();
+
+            editContent.getText().setSpan(new MyClickableSpan(this), spanStart, spanEnd, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        }
+
+    }
+
+    @Override
+    public void onClickableSpanClick() {
+        textEditedDateTime.requestFocus();
+        floatingActionButton.performClick();
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         editTitle = view.findViewById(R.id.note_item_title);
         editContent = view.findViewById(R.id.note_item_content);
+        textEditedDateTime = view.findViewById(R.id.text_edited_datetime);
         floatingActionButton = view.findViewById(R.id.floating_action_button);
         bibleReaderMini = view.findViewById(R.id.bible_mini_bottom_sheet);
+
+        editContent.setMovementMethod(ClickableMovementMethod.getInstance());
+        editContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                spanTextIfVerse(s, start, count);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
 
         final LiveData<NoteEntity> currentNote = noteViewModel.getCurrentNote();
         currentNote.observe(this, new Observer<NoteEntity>() {
@@ -105,8 +159,8 @@ public class EditNoteFragment extends Fragment {
             }
         });
 
+        // Setup Bottom Sheet
         final BottomSheetBehavior behavior = BottomSheetBehavior.from(bibleReaderMini);
-
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,9 +179,9 @@ public class EditNoteFragment extends Fragment {
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
             }
         });
+
 
         // Setup Bottom App Bar
         BottomAppBar bottomAppBar = view.findViewById(R.id.bottom_app_bar);
@@ -156,11 +210,12 @@ public class EditNoteFragment extends Fragment {
                         break;
                 }
 
-                // TODO: Add Toast to notify user about deletion/archival. Make view listen to event.
                 return true;
             }
         });
     }
+
+
 
     private void recordCurrentNote() {
         final NoteEntity currentNote = noteViewModel.getCurrentNote().getValue();
@@ -181,4 +236,5 @@ public class EditNoteFragment extends Fragment {
         recordCurrentNote();
         noteViewModel.saveNote();
     }
+
 }

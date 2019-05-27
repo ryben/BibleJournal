@@ -50,7 +50,7 @@ public class NoteViewModel extends AndroidViewModel implements NoteRepository.No
         currentNote.setValue(noteEntity);
     }
 
-    public LiveData<NoteEntity> getCurrentNote() {
+    public MediatorLiveData<NoteEntity> getCurrentNote() {
         return currentNote;
     }
 
