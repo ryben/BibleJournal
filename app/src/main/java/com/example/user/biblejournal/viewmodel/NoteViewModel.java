@@ -10,13 +10,14 @@ import androidx.lifecycle.MediatorLiveData;
 
 import com.example.user.biblejournal.model.database.note.NoteEntity;
 import com.example.user.biblejournal.model.Repository;
+import com.example.user.biblejournal.model.database.verse.VerseEntity;
 import com.example.user.biblejournal.model.note.NoteState;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class NoteViewModel extends AndroidViewModel implements Repository.NotesRepositoryListener {
+public class NoteViewModel extends AndroidViewModel implements Repository.NotesRepositoryListener, Repository.VerseRepositoryListener {
     private Repository repository;
     private MediatorLiveData<NoteEntity> currentNote;
     private MediatorLiveData<List<NoteEntity>> allNotes;
@@ -103,4 +104,8 @@ public class NoteViewModel extends AndroidViewModel implements Repository.NotesR
 
     }
 
+    @Override
+    public void onVerseRead(VerseEntity verseEntity) {
+        // TODO: Implement onVerseRead
+    }
 }
