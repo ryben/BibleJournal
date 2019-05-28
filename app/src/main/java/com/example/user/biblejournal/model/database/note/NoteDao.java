@@ -1,4 +1,4 @@
-package com.example.user.biblejournal.model.database;
+package com.example.user.biblejournal.model.database.note;
 
 
 import androidx.room.Dao;

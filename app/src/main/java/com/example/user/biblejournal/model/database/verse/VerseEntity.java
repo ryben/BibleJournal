@@ -1,4 +1,4 @@
-package com.example.user.biblejournal.model.database;
+package com.example.user.biblejournal.model.database.verse;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

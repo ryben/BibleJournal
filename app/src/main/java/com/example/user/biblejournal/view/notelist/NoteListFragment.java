@@ -1,4 +1,4 @@
-package com.example.user.biblejournal.view;
+package com.example.user.biblejournal.view.notelist;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.user.biblejournal.R;
-import com.example.user.biblejournal.adapter.NoteListAdapter;
-import com.example.user.biblejournal.model.database.NoteEntity;
+import com.example.user.biblejournal.view.notelist.NoteListAdapter;
+import com.example.user.biblejournal.model.database.note.NoteEntity;
 import com.example.user.biblejournal.viewmodel.NoteViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

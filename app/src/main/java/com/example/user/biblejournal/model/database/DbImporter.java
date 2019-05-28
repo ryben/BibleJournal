@@ -1,6 +1,6 @@
 package com.example.user.biblejournal.model.database;
 
-import android.content.Context;
+import android.app.Application;
 import android.util.Log;
 
 import androidx.room.Room;
@@ -19,18 +19,18 @@ public class DbImporter {
 
     private final AppDb appDb;
 
-    public static DbImporter getInstance(Context context) {
+    public static DbImporter getInstance(Application app) {
         if (null == INSTANCE) {
-            INSTANCE = new DbImporter(context);
+            INSTANCE = new DbImporter(app);
             return INSTANCE;
         } else {
             return INSTANCE;
         }
     }
 
-    private DbImporter(Context context) {
-        copyDbToDataFolder(context, DB_NAME);
-        appDb = Room.databaseBuilder(context, AppDb.class, DB_NAME)
+    private DbImporter(Application app) {
+        copyDbToDataFolder(app, DB_NAME);
+        appDb = Room.databaseBuilder(app, AppDb.class, DB_NAME)
                 .addMigrations(AppDb.MIGRATION_1_2)
                 .build();
     }
@@ -39,8 +39,8 @@ public class DbImporter {
         return appDb;
     }
 
-    private void copyDbToDataFolder(Context context, String databaseName) {
-        final File dbPath = context.getDatabasePath(databaseName);
+    private void copyDbToDataFolder(Application app, String databaseName) {
+        final File dbPath = app.getDatabasePath(databaseName);
 
         if (dbPath.exists()) {
             return;
@@ -50,7 +50,7 @@ public class DbImporter {
         dbPath.getParentFile().mkdirs();
 
         try {
-            final InputStream inputStream = context.getAssets().open(DB_FOLDER + "/" + databaseName);
+            final InputStream inputStream = app.getAssets().open(DB_FOLDER + "/" + databaseName);
             final OutputStream output = new FileOutputStream(dbPath);
 
             byte[] buffer = new byte[8192];

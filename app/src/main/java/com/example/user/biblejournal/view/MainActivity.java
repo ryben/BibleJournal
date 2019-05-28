@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.user.biblejournal.R;
+import com.example.user.biblejournal.view.editnote.EditNoteFragment;
+import com.example.user.biblejournal.view.notelist.NoteListFragment;
 
 public class MainActivity extends AppCompatActivity implements EditNoteFragment.EditNoteListener, NoteListFragment.NoteListListener {
 

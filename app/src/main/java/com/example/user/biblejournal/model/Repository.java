@@ -1,26 +1,32 @@
-package com.example.user.biblejournal.model.database;
+package com.example.user.biblejournal.model;
 
-import android.content.Context;
+import android.app.Application;
 import android.os.AsyncTask;
 
+import com.example.user.biblejournal.model.database.AppDb;
+import com.example.user.biblejournal.model.database.note.NoteDao;
+import com.example.user.biblejournal.model.database.note.NoteEntity;
+import com.example.user.biblejournal.model.database.verse.VerseDao;
+import com.example.user.biblejournal.model.database.verse.VerseEntity;
 import com.example.user.biblejournal.model.note.NoteState;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class NoteRepository {
+public class Repository {
     private final NoteDao noteDao;
     private final VerseDao verseDao;
 
     // TODO: Proper achitecture of Repository
-    public NoteRepository(Context context) {
-        AppDb db = AppDb.getInstance(context); // TODO: Use dependency injection
+    public Repository(Application app) {
+        AppDb db = AppDb.getInstance(app); // TODO: Use dependency injection
         noteDao = db.noteDao();
         verseDao = db.verseDao();
     }
 
     public interface NotesRepositoryListener {
         void onNotesRead(List<NoteEntity> noteEntities);
+
         void onNoteFetchedById(NoteEntity noteEntity);
     }
 
@@ -99,7 +105,7 @@ public class NoteRepository {
         private NoteDao mAsyncTaskDao;
         private NotesRepositoryListener notesRepositoryListener;
 
-        GetNoteByIdAsyncTask(NoteDao dao,  NotesRepositoryListener notesRepositoryListener) {
+        GetNoteByIdAsyncTask(NoteDao dao, NotesRepositoryListener notesRepositoryListener) {
             mAsyncTaskDao = dao;
             this.notesRepositoryListener = notesRepositoryListener;
         }

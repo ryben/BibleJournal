@@ -1,4 +1,4 @@
-package com.example.user.biblejournal.adapter;
+package com.example.user.biblejournal.view.notelist;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.user.biblejournal.R;
-import com.example.user.biblejournal.model.database.NoteEntity;
+import com.example.user.biblejournal.model.database.note.NoteEntity;
 import com.example.user.biblejournal.utils.StringUtil;
 
 import java.util.List;
@@ -21,6 +21,10 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
     public NoteListAdapter(List<NoteEntity> notes, ListItemListener listItemListener) {
         setNotes(notes);
         this.listItemListener = listItemListener;
+    }
+
+    public interface ListItemListener {
+        void onItemClick(int noteId);
     }
 
     @NonNull
@@ -58,9 +62,6 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
         }
     }
 
-    public interface ListItemListener {
-        void onItemClick(int noteId);
-    }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView textTitle;

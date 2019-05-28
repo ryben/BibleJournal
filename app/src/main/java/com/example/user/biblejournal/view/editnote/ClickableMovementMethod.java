@@ -1,4 +1,4 @@
-package com.example.user.biblejournal.view;
+package com.example.user.biblejournal.view.editnote;
 
 import android.text.Layout;
 import android.text.Selection;

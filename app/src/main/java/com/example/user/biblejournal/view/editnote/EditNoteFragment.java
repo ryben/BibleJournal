@@ -1,10 +1,11 @@
-package com.example.user.biblejournal.view;
+package com.example.user.biblejournal.view.editnote;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +23,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.user.biblejournal.R;
-import com.example.user.biblejournal.model.database.NoteEntity;
+import com.example.user.biblejournal.model.database.note.NoteEntity;
 import com.example.user.biblejournal.viewmodel.NoteViewModel;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
 import java.util.Objects;
 
 public class EditNoteFragment extends Fragment implements MyClickableSpan.ClickableSpanListener {
@@ -93,27 +95,6 @@ public class EditNoteFragment extends Fragment implements MyClickableSpan.Clicka
         return inflater.inflate(R.layout.fragment_edit_note, container, false);
     }
 
-    private void spanTextIfVerse(CharSequence s, int start, int count) { // TODO: To Move to model layer
-        int searchLength = 10;
-        int searchStart = start - searchLength;
-        int searchEnd = start + count;
-
-        if (searchStart < 0) {
-            searchStart = 0;
-        }
-
-
-        String searchText = s.subSequence(searchStart, searchEnd).toString();
-        String toSearch = "Verse";
-
-        if (searchText.contains(toSearch)) {
-            int spanStart = searchText.indexOf(toSearch) + searchStart;
-            int spanEnd = spanStart + toSearch.length();
-
-            editContent.getText().setSpan(new MyClickableSpan(this), spanStart, spanEnd, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-        }
-
-    }
 
     @Override
     public void onClickableSpanClick() {
@@ -140,7 +121,7 @@ public class EditNoteFragment extends Fragment implements MyClickableSpan.Clicka
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                spanTextIfVerse(s, start, count);
+                noteViewModel.findSpannables(s, start, count);
             }
 
             @Override
@@ -215,7 +196,15 @@ public class EditNoteFragment extends Fragment implements MyClickableSpan.Clicka
         });
     }
 
-
+    private void setSpans(List<Pair<Integer, Integer>> spans) {
+        for (Pair<Integer, Integer> pair : spans) {
+            editContent.getText().setSpan(
+                    new MyClickableSpan(this),
+                    pair.first,
+                    pair.second,
+                    Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        }
+    }
 
     private void recordCurrentNote() {
         final NoteEntity currentNote = noteViewModel.getCurrentNote().getValue();

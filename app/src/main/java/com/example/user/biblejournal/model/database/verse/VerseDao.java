@@ -1,4 +1,4 @@
-package com.example.user.biblejournal.model.database;
+package com.example.user.biblejournal.model.database.verse;
 
 import androidx.room.Dao;
 import androidx.room.Query;

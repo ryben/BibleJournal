@@ -1,4 +1,4 @@
-package com.example.user.biblejournal.view;
+package com.example.user.biblejournal.view.editnote;
 
 import android.text.style.ClickableSpan;
 import android.view.View;
