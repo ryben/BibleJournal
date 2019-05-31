@@ -1,6 +1,7 @@
 package com.example.user.biblejournal.model;
 
 import android.app.Application;
+import android.util.Pair;
 
 import com.example.user.biblejournal.model.asynctasks.GetAllNotesAsyncTask;
 import com.example.user.biblejournal.model.asynctasks.GetNoteByIdAsyncTask;
@@ -19,11 +20,13 @@ import java.util.List;
 public class Repository {
     private final NoteDao noteDao;
     private final VerseDao verseDao;
+    private final BibleModel bibleModel;
 
     public Repository(Application app) {
         AppDb db = AppDb.getInstance(app); // TODO: Use dependency injection
         noteDao = db.noteDao();
         verseDao = db.verseDao();
+        bibleModel = new BibleModel();
     }
 
     public interface NotesRepositoryListener {
@@ -59,5 +62,9 @@ public class Repository {
 
     public void executeGetVerseById(VerseRepositoryListener listener, int book, int chapter, int verse) {
         new GetVerseByIdAsyncTask(verseDao, listener).execute(book, chapter, verse);
+    }
+
+    public List<Pair<Integer, Integer>> findSpannables(CharSequence s, int start, int count) {
+        return bibleModel.findSpannables(s, start, count);
     }
 }

@@ -130,13 +130,25 @@ public class EditNoteFragment extends Fragment implements MyClickableSpan.Clicka
             }
         });
 
-
         final LiveData<NoteEntity> currentNote = noteViewModel.getCurrentNote();
         currentNote.observe(this, new Observer<NoteEntity>() {
             @Override
             public void onChanged(NoteEntity noteEntity) {
                 editTitle.setText(noteEntity.getTitle());
                 editContent.setText(noteEntity.getContent());
+            }
+        });
+
+        noteViewModel.getTextSpannables().observe(this, new Observer<List<Pair<Integer, Integer>>>() {
+            @Override
+            public void onChanged(List<Pair<Integer, Integer>> pairs) {
+                for (Pair<Integer, Integer> pair : pairs) {
+                    editContent.getText().setSpan(
+                            new MyClickableSpan(EditNoteFragment.this),
+                            pair.first,
+                            pair.second,
+                            Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                }
             }
         });
 
@@ -194,16 +206,6 @@ public class EditNoteFragment extends Fragment implements MyClickableSpan.Clicka
                 return true;
             }
         });
-    }
-
-    private void setSpans(List<Pair<Integer, Integer>> spans) {
-        for (Pair<Integer, Integer> pair : spans) {
-            editContent.getText().setSpan(
-                    new MyClickableSpan(this),
-                    pair.first,
-                    pair.second,
-                    Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-        }
     }
 
     private void recordCurrentNote() {

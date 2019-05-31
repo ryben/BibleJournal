@@ -2,14 +2,15 @@ package com.example.user.biblejournal.viewmodel;
 
 
 import android.app.Application;
+import android.util.Pair;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
-import com.example.user.biblejournal.model.database.note.NoteEntity;
 import com.example.user.biblejournal.model.Repository;
+import com.example.user.biblejournal.model.database.note.NoteEntity;
 import com.example.user.biblejournal.model.database.verse.VerseEntity;
 import com.example.user.biblejournal.model.note.NoteState;
 
@@ -21,6 +22,7 @@ public class NoteViewModel extends AndroidViewModel implements Repository.NotesR
     private Repository repository;
     private MediatorLiveData<NoteEntity> currentNote;
     private MediatorLiveData<List<NoteEntity>> allNotes;
+    private MediatorLiveData<List<Pair<Integer, Integer>>> textSpannables;
 
     public NoteViewModel(Application app) {
         super(app);
@@ -31,6 +33,7 @@ public class NoteViewModel extends AndroidViewModel implements Repository.NotesR
         allNotes.setValue(noteEntities);
 
         currentNote = new MediatorLiveData<>();
+        textSpannables = new MediatorLiveData<>();
     }
 
     public LiveData<List<NoteEntity>> getAllNotes() {
@@ -39,6 +42,10 @@ public class NoteViewModel extends AndroidViewModel implements Repository.NotesR
 
     public MediatorLiveData<NoteEntity> getCurrentNote() {
         return currentNote;
+    }
+
+    public MediatorLiveData<List<Pair<Integer, Integer>>> getTextSpannables() {
+        return textSpannables;
     }
 
     public void readAllNotes() {
@@ -85,23 +92,10 @@ public class NoteViewModel extends AndroidViewModel implements Repository.NotesR
 
 
     public void findSpannables(CharSequence s, int start, int count) { // TODO: To Move to model layer
-        int searchLength = 10;
-        int searchStart = start - searchLength;
-        int searchEnd = start + count;
-
-        if (searchStart < 0) {
-            searchStart = 0;
+        final List<Pair<Integer, Integer>> spannables = repository.findSpannables(s, start, count);
+        if (!spannables.isEmpty()) {
+            textSpannables.setValue(spannables);
         }
-
-        String searchText = s.subSequence(searchStart, searchEnd).toString();
-        String toSearch = "Verse";
-
-        if (searchText.contains(toSearch)) {
-            int spanStart = searchText.indexOf(toSearch) + searchStart;
-            int spanEnd = spanStart + toSearch.length();
-
-        }
-
     }
 
     @Override
