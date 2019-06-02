@@ -40,7 +40,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.MyView
         holder.textTitle.setText(note.getTitle());
         holder.textCreationTime.setText(note.getDateCreated());
 
-        if (StringUtil.isEmpty(note.getTags())) {
+        if (StringUtil.INSTANCE.isEmpty(note.getTags())) {
             holder.textTags.setVisibility(View.GONE);
         } else {
             holder.textTags.setVisibility(View.VISIBLE);
