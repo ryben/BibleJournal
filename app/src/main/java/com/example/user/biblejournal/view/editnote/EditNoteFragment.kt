@@ -5,24 +5,19 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Spanned
 import android.text.TextWatcher
-import android.util.Pair
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 
 import com.example.user.biblejournal.R
-import com.example.user.biblejournal.model.database.note.NoteEntity
-import com.example.user.biblejournal.viewmodel.NoteViewModel
+import com.example.user.biblejournal.viewmodel.BibleViewModel
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,7 +26,7 @@ import java.util.Objects
 class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     private var editNoteListener: EditNoteListener? = null
 
-    private var noteViewModel: NoteViewModel? = null
+    private var bibleViewModel: BibleViewModel? = null
     private var editTitle: EditText? = null
     private var editContent: EditText? = null
     private var floatingActionButton: FloatingActionButton? = null
@@ -57,7 +52,7 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        noteViewModel = ViewModelProviders.of(Objects.requireNonNull<FragmentActivity>(activity)).get(NoteViewModel::class.java)
+        bibleViewModel = ViewModelProviders.of(Objects.requireNonNull<FragmentActivity>(activity)).get(BibleViewModel::class.java)
 
         val arguments = arguments
         var noteId: Int? = null
@@ -65,7 +60,7 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
             noteId = arguments.getInt(ARG_NOTE_ID_KEY)
         }
 
-        noteViewModel!!.startNote(noteId)
+        bibleViewModel!!.startNote(noteId)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -95,7 +90,13 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                noteViewModel!!.findSpannables(s, start, count)
+                //  remove existing spans within the range
+                val spans = editContent!!.text.getSpans(start, start + count, MyClickableSpan::class.java)
+                for (span in spans) {
+                    editContent!!.text.removeSpan(span)
+                }
+
+                bibleViewModel!!.findSpannables(s, start, count)
             }
 
             override fun afterTextChanged(s: Editable) {
@@ -103,19 +104,19 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
             }
         })
 
-        val currentNote = noteViewModel!!.currentNote
+        val currentNote = bibleViewModel!!.currentNote
         currentNote.observe(this, Observer { noteEntity ->
             editTitle!!.setText(noteEntity.title)
             editContent!!.setText(noteEntity.content)
         })
 
-        noteViewModel!!.textSpannables.observe(this, Observer { pairs ->
+        bibleViewModel!!.textSpannables.observe(this, Observer { pairs ->
             for (pair in pairs) {
                 editContent!!.text.setSpan(
                         MyClickableSpan(this@EditNoteFragment),
                         pair.first,
                         pair.second,
-                        Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         })
 
@@ -141,19 +142,19 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
         val bottomAppBar = view.findViewById<BottomAppBar>(R.id.bottom_app_bar)
         bottomAppBar.setNavigationOnClickListener {
             recordCurrentNote()
-            noteViewModel!!.saveNote()
+            bibleViewModel!!.saveNote()
             editNoteListener!!.backPreviousScreen()
         }
         bottomAppBar.inflateMenu(R.menu.edit_note_menu)
         bottomAppBar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_archive -> {
-                    noteViewModel!!.archiveNote()
+                    bibleViewModel!!.archiveNote()
                     editNoteListener!!.backPreviousScreen()
                     Toast.makeText(activity, "Note archived", Toast.LENGTH_SHORT).show()
                 }
                 R.id.action_delete -> {
-                    noteViewModel!!.deleteNote()
+                    bibleViewModel!!.deleteNote()
                     editNoteListener!!.backPreviousScreen()
                     Toast.makeText(activity, "Note deleted", Toast.LENGTH_SHORT).show()
                 }
@@ -164,7 +165,7 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     }
 
     private fun recordCurrentNote() {
-        val currentNote = noteViewModel!!.currentNote.value
+        val currentNote = bibleViewModel!!.currentNote.value
         currentNote!!.title = editTitle!!.text.toString()
         currentNote.content = editContent!!.text.toString()
     }
@@ -172,13 +173,18 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     override fun onPause() {
         super.onPause()
         recordCurrentNote()
-        noteViewModel!!.saveNote()
+        bibleViewModel!!.saveNote()
     }
 
     override fun onStop() {
         super.onStop()
         recordCurrentNote()
-        noteViewModel!!.saveNote()
+        bibleViewModel!!.saveNote()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        bibleViewModel?.clearSpannables()
     }
 
     companion object {

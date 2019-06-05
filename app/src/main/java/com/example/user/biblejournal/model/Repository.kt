@@ -5,26 +5,22 @@ import android.util.Pair
 
 import com.example.user.biblejournal.model.asynctasks.GetAllNotesAsyncTask
 import com.example.user.biblejournal.model.asynctasks.GetNoteByIdAsyncTask
-import com.example.user.biblejournal.model.asynctasks.GetVerseByIdAsyncTask
 import com.example.user.biblejournal.model.asynctasks.InsertNoteAsyncTask
 import com.example.user.biblejournal.model.asynctasks.UpdateNoteAsyncTask
 import com.example.user.biblejournal.model.database.AppDb
 import com.example.user.biblejournal.model.database.note.NoteDao
 import com.example.user.biblejournal.model.database.note.NoteEntity
-import com.example.user.biblejournal.model.database.verse.VerseDao
-import com.example.user.biblejournal.model.database.verse.VerseEntity
+import com.example.user.biblejournal.model.database.bible.VerseEntity
 import com.example.user.biblejournal.model.note.NoteState
 
 class Repository(app: Application) {
     private val noteDao: NoteDao
-    private val verseDao: VerseDao
     private val bibleModel: BibleModel
 
     init {
         val db = AppDb.getInstance(app) // TODO: Use dependency injection
         noteDao = db!!.noteDao()
-        verseDao = db.verseDao()
-        bibleModel = BibleModel()
+        bibleModel = BibleModel(db)
     }
 
     interface NotesRepositoryListener {
@@ -58,9 +54,6 @@ class Repository(app: Application) {
         UpdateNoteAsyncTask(noteDao).execute(noteEntity)
     }
 
-    fun executeGetVerseById(listener: VerseRepositoryListener, book: Int, chapter: Int, verse: Int) {
-        GetVerseByIdAsyncTask(verseDao, listener).execute(book, chapter, verse)
-    }
 
     fun findSpannables(s: CharSequence, start: Int, count: Int): List<Pair<Int, Int>> {
         return bibleModel.findSpannables(s, start, count)

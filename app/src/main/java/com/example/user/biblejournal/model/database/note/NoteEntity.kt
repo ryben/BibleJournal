@@ -8,28 +8,28 @@ import androidx.room.PrimaryKey
 import com.example.user.biblejournal.model.note.NoteState
 
 @Entity
-class NoteEntity {
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+data class NoteEntity(
+        @PrimaryKey(autoGenerate = true)
+        var id: Int = 0,
 
-    @ColumnInfo
-    var title: String? = null
+        @ColumnInfo
+        var title: String? = null,
 
-    @ColumnInfo
-    var content: String? = null
+        @ColumnInfo
+        var content: String? = null,
 
-    @ColumnInfo
-    var dateCreated: String? = null
+        @ColumnInfo
+        var dateCreated: String? = null,
 
-    @ColumnInfo
-    var dateEdited: String? = null
+        @ColumnInfo
+        var dateEdited: String? = null,
 
-    @ColumnInfo
-    var tags: String? = null
+        @ColumnInfo
+        var tags: String? = null,
 
-    @ColumnInfo
-    var state: String? = null
-
+        @ColumnInfo
+        var state: String? = null
+) {
     companion object {
 
         fun newInstance(): NoteEntity {

@@ -3,8 +3,8 @@ package com.example.user.biblejournal.model.asynctasks
 import android.os.AsyncTask
 
 import com.example.user.biblejournal.model.Repository
-import com.example.user.biblejournal.model.database.verse.VerseDao
-import com.example.user.biblejournal.model.database.verse.VerseEntity
+import com.example.user.biblejournal.model.database.bible.VerseDao
+import com.example.user.biblejournal.model.database.bible.VerseEntity
 
 class GetVerseByIdAsyncTask(private val mAsyncTaskDao: VerseDao, private val listener: Repository.VerseRepositoryListener) : AsyncTask<Int, Void, VerseEntity>() {
 

@@ -7,16 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.user.biblejournal.R
-import com.example.user.biblejournal.view.notelist.NoteListAdapter
-import com.example.user.biblejournal.model.database.note.NoteEntity
-import com.example.user.biblejournal.viewmodel.NoteViewModel
+import com.example.user.biblejournal.viewmodel.BibleViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.Objects
 
@@ -24,7 +21,7 @@ import java.util.Objects
 class NoteListFragment : Fragment(), NoteListAdapter.ListItemListener {
     private var noteListListener: NoteListListener? = null
     private var floatingActionButton: FloatingActionButton? = null
-    private var noteViewModel: NoteViewModel? = null
+    private var bibleViewModel: BibleViewModel? = null
     private var noteListRecyclerView: RecyclerView? = null
 
     interface NoteListListener {
@@ -55,8 +52,8 @@ class NoteListFragment : Fragment(), NoteListAdapter.ListItemListener {
 
         floatingActionButton!!.setOnClickListener { noteListListener!!.startEditNote(null) }
 
-        noteViewModel = ViewModelProviders.of(Objects.requireNonNull<FragmentActivity>(activity)).get(NoteViewModel::class.java)
-        val notes = noteViewModel!!.getAllNotes()
+        bibleViewModel = ViewModelProviders.of(Objects.requireNonNull<FragmentActivity>(activity)).get(BibleViewModel::class.java)
+        val notes = bibleViewModel!!.getAllNotes()
 
         val noteListAdapter = NoteListAdapter(notes.value!!, this)
         noteListRecyclerView!!.adapter = noteListAdapter
@@ -64,7 +61,7 @@ class NoteListFragment : Fragment(), NoteListAdapter.ListItemListener {
 
         notes.observe(this, Observer { noteEntities -> noteListAdapter.setNotes(noteEntities) })
 
-        noteViewModel!!.readAllNotes()
+        bibleViewModel!!.readAllNotes()
     }
 
     override fun onItemClick(noteId: Int) {
