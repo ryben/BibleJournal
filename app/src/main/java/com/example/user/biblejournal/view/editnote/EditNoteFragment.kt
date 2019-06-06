@@ -15,12 +15,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.user.biblejournal.R
+import com.example.user.biblejournal.model.VerseAddress
 import com.example.user.biblejournal.viewmodel.BibleViewModel
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
+
+
     private var editNoteListener: EditNoteListener? = null
 
     private var bibleViewModel: BibleViewModel? = null
@@ -60,7 +63,7 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     }
 
 
-    override fun onClickableSpanClick() {
+    override fun onClickableSpanClick(verseAddress: VerseAddress) {
         textEditedDateTime!!.requestFocus()
         floatingActionButton!!.performClick()
     }
@@ -101,12 +104,13 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
             editContent!!.setText(noteEntity.content)
         })
 
-        bibleViewModel!!.textSpannables.observe(this, Observer { pairs ->
-            for (pair in pairs) {
+        bibleViewModel!!.textSpannables.observe(this, Observer { locatedVerseAddresses ->
+            for (locatedVerseAddress in locatedVerseAddresses) {
+                val span = MyClickableSpan(this@EditNoteFragment, locatedVerseAddress.verseAddress)
                 editContent!!.text.setSpan(
-                        MyClickableSpan(this@EditNoteFragment),
-                        pair.first,
-                        pair.second,
+                        span,
+                        locatedVerseAddress.startIndex,
+                        locatedVerseAddress.endIndex,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         })

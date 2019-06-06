@@ -55,7 +55,7 @@ class Repository(app: Application) {
     }
 
 
-    fun findSpannables(s: CharSequence, start: Int, count: Int): List<Pair<Int, Int>> {
+    fun findSpannables(s: CharSequence, start: Int, count: Int): List<LocatedVerseAddress> {
         return bibleModel.findSpannables(s, start, count)
     }
 }

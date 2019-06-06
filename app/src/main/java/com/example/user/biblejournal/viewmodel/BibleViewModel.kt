@@ -5,6 +5,7 @@ import android.app.Application
 import android.util.Pair
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MediatorLiveData
+import com.example.user.biblejournal.model.LocatedVerseAddress
 import com.example.user.biblejournal.model.Repository
 import com.example.user.biblejournal.model.database.bible.VerseEntity
 import com.example.user.biblejournal.model.database.note.NoteEntity
@@ -15,7 +16,7 @@ class BibleViewModel(app: Application) : AndroidViewModel(app), Repository.Notes
     private val repository: Repository = Repository(app)
     val currentNote: MediatorLiveData<NoteEntity> = MediatorLiveData()
     val allNotes: MediatorLiveData<List<NoteEntity>> = MediatorLiveData()
-    val textSpannables: MediatorLiveData<List<Pair<Int, Int>>> = MediatorLiveData()
+    val textSpannables: MediatorLiveData<List<LocatedVerseAddress>> = MediatorLiveData()
 
     init {
         allNotes.value = ArrayList()
