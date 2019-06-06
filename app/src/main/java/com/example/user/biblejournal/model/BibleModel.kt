@@ -1,8 +1,9 @@
 package com.example.user.biblejournal.model
 
-import android.util.Pair
 import android.util.SparseArray
-import com.example.user.biblejournal.model.asynctasks.GetVerseByIdAsyncTask
+import com.example.user.biblejournal.model.data.LocatedVerseAddress
+import com.example.user.biblejournal.model.data.VerseAddress
+import com.example.user.biblejournal.model.data.VerseInfo
 import com.example.user.biblejournal.model.database.AppDb
 import com.example.user.biblejournal.model.database.bible.BookNameDao
 import com.example.user.biblejournal.model.database.bible.MaxVerseDao
@@ -21,8 +22,10 @@ class BibleModel(db: AppDb) {
     private val verseAddressParser = VerseAddressParser()
     private val compositeDisposable = CompositeDisposable()
 
+    private val bookNamesToInt = HashMap<String, Int>()
+    private val bookNames = SparseArray<String>()
+
     init {
-        val bookNames = HashMap<String, Int>()
         val maxVerses = SparseArray<List<Int>>()
 
         compositeDisposable.add(Observable.fromCallable { maxVerseDao.getMaxVerses() }
@@ -33,24 +36,40 @@ class BibleModel(db: AppDb) {
                         result.forEach { maxVerse -> maxVerses.put(maxVerse.book, maxVerse.maxVerses.split(",").map { it.toInt() }) }
                         verseAddressParser.maxVerses = maxVerses
                     }
-                }, {}, {}, {}))
+                }, {}))
 
         compositeDisposable.add(Observable.fromCallable { bookNameDao.getAllBookNames() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
                     run {
-                        result.forEach { book -> bookNames[book.name.toLowerCase()] = book.id }
-                        verseAddressParser.bookNames = bookNames
+                        result.forEach { book ->
+                            run {
+                                bookNamesToInt[book.name.toLowerCase()] = book.id
+                                bookNames.put(book.id, book.name)
+                            }
+                        }
+                        verseAddressParser.bookNames = bookNamesToInt
                     }
-                }, {}, {}, {}))
+                }, {}))
     }
 
     fun findSpannables(s: CharSequence, start: Int, count: Int): List<LocatedVerseAddress> {
         return verseAddressParser.findSpannables(s, start, count)
     }
 
-    fun executeGetVerseById(listener: Repository.VerseRepositoryListener, book: Int, chapter: Int, verse: Int) {
-        GetVerseByIdAsyncTask(verseDao, listener).execute(book, chapter, verse)
+    fun getVerseById(verseAddress: VerseAddress, listener: Repository.RepositoryListener) {
+        compositeDisposable.add(Observable.fromCallable { verseDao.getVerse(verseAddress.book, verseAddress.chapter, verseAddress.verse) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ result ->
+                    run {
+
+                        val verseInfo = VerseInfo(verseAddress, result.content, bookNames[result.book])
+
+                        listener.onVerseRead(verseInfo)
+                    }
+                }, {})
+        )
     }
 }

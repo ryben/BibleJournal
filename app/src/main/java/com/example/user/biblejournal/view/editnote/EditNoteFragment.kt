@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.user.biblejournal.R
-import com.example.user.biblejournal.model.VerseAddress
+import com.example.user.biblejournal.model.data.VerseAddress
 import com.example.user.biblejournal.viewmodel.BibleViewModel
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -31,7 +31,27 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     private var editContent: EditText? = null
     private var floatingActionButton: FloatingActionButton? = null
     private var bibleReaderMini: View? = null
+    private var verseContent: TextView? = null
+    private var verseAddress: TextView? = null
     private var textEditedDateTime: TextView? = null
+
+    companion object {
+
+        private const val ARG_NOTE_ID_KEY = "ARG_NOTE_ID"
+
+        fun newInstance(noteId: Int?): EditNoteFragment {
+            val editNoteFragment = EditNoteFragment()
+
+            if (null != noteId) {
+                val args = Bundle()
+                args.putInt(ARG_NOTE_ID_KEY, noteId)
+                editNoteFragment.arguments = args
+            }
+
+            return editNoteFragment
+        }
+    }
+
 
     interface EditNoteListener {
         fun backPreviousScreen()
@@ -64,8 +84,11 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
 
 
     override fun onClickableSpanClick(verseAddress: VerseAddress) {
-        textEditedDateTime!!.requestFocus()
-        floatingActionButton!!.performClick()
+        textEditedDateTime?.requestFocus()
+
+        bibleViewModel?.readVerse(verseAddress)
+
+        floatingActionButton?.performClick()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,25 +99,26 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
         textEditedDateTime = view.findViewById(R.id.text_edited_datetime)
         floatingActionButton = view.findViewById(R.id.floating_action_button)
         bibleReaderMini = view.findViewById(R.id.bible_mini_bottom_sheet)
+        verseContent = view.findViewById(R.id.verse_content)
+        verseAddress = view.findViewById(R.id.verse_address)
 
-        editContent!!.movementMethod = ClickableMovementMethod.instance
-        editContent!!.addTextChangedListener(object : TextWatcher {
+        editContent?.movementMethod = ClickableMovementMethod.instance
+        editContent?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 //  remove existing spans within the range
-                val spans = editContent!!.text.getSpans(start, start + count, MyClickableSpan::class.java)
-                for (span in spans) {
+                val existingSpans = this@EditNoteFragment.editContent!!.text.getSpans(start, start + count, MyClickableSpan::class.java)
+                for (span in existingSpans) {
                     editContent!!.text.removeSpan(span)
                 }
 
-                bibleViewModel!!.findSpannables(s, start, count)
+
+                bibleViewModel?.findSpannables(s, start, count)
             }
 
             override fun afterTextChanged(s: Editable) {
-
             }
         })
 
@@ -104,13 +128,20 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
             editContent!!.setText(noteEntity.content)
         })
 
+        // Set behavior when verses are detected
         bibleViewModel!!.textSpannables.observe(this, Observer { locatedVerseAddresses ->
-            for (locatedVerseAddress in locatedVerseAddresses) {
-                val span = MyClickableSpan(this@EditNoteFragment, locatedVerseAddress.verseAddress)
+            for (address in locatedVerseAddresses) {
+                //  remove existing spans within the range
+                val existingSpans = this@EditNoteFragment.editContent!!.text.getSpans(address.startIndex, address.endIndex, MyClickableSpan::class.java)
+                for (span in existingSpans) {
+                    editContent!!.text.removeSpan(span)
+                }
+
+                val span = MyClickableSpan(this@EditNoteFragment, address.verseAddress)
                 editContent!!.text.setSpan(
                         span,
-                        locatedVerseAddress.startIndex,
-                        locatedVerseAddress.endIndex,
+                        address.startIndex,
+                        address.endIndex,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         })
@@ -130,6 +161,12 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+
+        bibleViewModel!!.verseToShow.observe(this, Observer { verseInfo ->
+            verseContent?.text = verseInfo.content
+            val fullVerseAddress = "${verseInfo.bookName} ${verseInfo.verseAddress.chapter}:${verseInfo.verseAddress.verse}"
+            verseAddress?.text = fullVerseAddress
         })
 
 
@@ -182,21 +219,5 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
         bibleViewModel?.clearSpannables()
     }
 
-    companion object {
-
-        private const val ARG_NOTE_ID_KEY = "ARG_NOTE_ID"
-
-        fun newInstance(noteId: Int?): EditNoteFragment {
-            val editNoteFragment = EditNoteFragment()
-
-            if (null != noteId) {
-                val args = Bundle()
-                args.putInt(ARG_NOTE_ID_KEY, noteId)
-                editNoteFragment.arguments = args
-            }
-
-            return editNoteFragment
-        }
-    }
 
 }

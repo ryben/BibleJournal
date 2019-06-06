@@ -1,4 +1,4 @@
-package com.example.user.biblejournal.model
+package com.example.user.biblejournal.model.data
 
 data class LocatedVerseAddress(
         val startIndex: Int,

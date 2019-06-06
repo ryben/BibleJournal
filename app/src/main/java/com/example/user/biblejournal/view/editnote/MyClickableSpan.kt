@@ -3,7 +3,7 @@ package com.example.user.biblejournal.view.editnote
 import android.text.TextPaint
 import android.text.style.ClickableSpan
 import android.view.View
-import com.example.user.biblejournal.model.VerseAddress
+import com.example.user.biblejournal.model.data.VerseAddress
 
 class MyClickableSpan(private val clickListener: ClickableSpanListener, private val verseAddress: VerseAddress) : ClickableSpan() {
 

@@ -2,35 +2,37 @@ package com.example.user.biblejournal.viewmodel
 
 
 import android.app.Application
-import android.util.Pair
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MediatorLiveData
-import com.example.user.biblejournal.model.LocatedVerseAddress
+import com.example.user.biblejournal.model.data.LocatedVerseAddress
 import com.example.user.biblejournal.model.Repository
+import com.example.user.biblejournal.model.data.VerseAddress
+import com.example.user.biblejournal.model.data.VerseInfo
 import com.example.user.biblejournal.model.database.bible.VerseEntity
 import com.example.user.biblejournal.model.database.note.NoteEntity
 import com.example.user.biblejournal.model.note.NoteState
 import java.util.*
 
-class BibleViewModel(app: Application) : AndroidViewModel(app), Repository.NotesRepositoryListener, Repository.VerseRepositoryListener {
+class BibleViewModel(app: Application) : AndroidViewModel(app), Repository.RepositoryListener {
     private val repository: Repository = Repository(app)
     val currentNote: MediatorLiveData<NoteEntity> = MediatorLiveData()
     val allNotes: MediatorLiveData<List<NoteEntity>> = MediatorLiveData()
     val textSpannables: MediatorLiveData<List<LocatedVerseAddress>> = MediatorLiveData()
+    val verseToShow = MediatorLiveData<VerseInfo>()
 
     init {
         allNotes.value = ArrayList()
     }
 
     fun readAllNotes() {
-        repository.executeReadAllNotes(this)
+        repository.readAllNotes(this)
     }
 
     fun startNote(noteId: Int?) {
         if (null == noteId) {
             currentNote.setValue(NoteEntity.newInstance())
         } else {
-            repository.executeGetNoteById(noteId, this)
+            repository.getNoteById(noteId, this)
         }
     }
 
@@ -74,7 +76,12 @@ class BibleViewModel(app: Application) : AndroidViewModel(app), Repository.Notes
         textSpannables.value = emptyList()
     }
 
-    override fun onVerseRead(verseEntity: VerseEntity) {
-        // TODO: Implement onVerseRead
+    fun readVerse(verseAddress: VerseAddress) {
+        repository.readVerse(verseAddress, this)
     }
+
+    override fun onVerseRead(verseInfo: VerseInfo) {
+        verseToShow.value = verseInfo
+    }
+
 }
