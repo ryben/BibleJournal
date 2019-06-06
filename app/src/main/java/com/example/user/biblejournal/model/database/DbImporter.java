@@ -29,7 +29,7 @@ public class DbImporter {
     }
 
     private DbImporter(Application app) {
-        copyDbToDataFolder(app, DB_NAME);
+        copyDbToDataFolder(app);
         appDb = Room.databaseBuilder(app, AppDb.class, DB_NAME)
                 .addMigrations(AppDb.MIGRATION_1_2)
                 .build();
@@ -39,8 +39,8 @@ public class DbImporter {
         return appDb;
     }
 
-    private void copyDbToDataFolder(Application app, String databaseName) {
-        final File dbPath = app.getDatabasePath(databaseName);
+    private void copyDbToDataFolder(Application app) {
+        final File dbPath = app.getDatabasePath(DB_NAME);
 
         if (dbPath.exists()) {
             return;
@@ -50,7 +50,7 @@ public class DbImporter {
         dbPath.getParentFile().mkdirs();
 
         try {
-            final InputStream inputStream = app.getAssets().open(DB_FOLDER + "/" + databaseName);
+            final InputStream inputStream = app.getAssets().open(DB_FOLDER + "/" + DB_NAME);
             final OutputStream output = new FileOutputStream(dbPath);
 
             byte[] buffer = new byte[8192];

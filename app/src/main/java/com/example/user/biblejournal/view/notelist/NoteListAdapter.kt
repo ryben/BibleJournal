@@ -54,15 +54,11 @@ class NoteListAdapter(notes: List<NoteEntity>, private val listItemListener: Lis
 
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        var textTitle: TextView
-        var textTags: TextView
-        var textCreationTime: TextView
+        var textTitle: TextView = itemView.findViewById(R.id.note_item_title)
+        var textTags: TextView = itemView.findViewById(R.id.note_item_tags)
+        var textCreationTime: TextView = itemView.findViewById(R.id.note_item_creation_time)
 
         init {
-            textTitle = itemView.findViewById(R.id.note_item_title)
-            textTags = itemView.findViewById(R.id.note_item_tags)
-            textCreationTime = itemView.findViewById(R.id.note_item_creation_time)
-
             itemView.setOnClickListener(this)
         }
 

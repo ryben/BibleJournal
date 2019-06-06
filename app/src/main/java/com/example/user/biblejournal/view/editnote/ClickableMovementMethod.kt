@@ -1,6 +1,5 @@
 package com.example.user.biblejournal.view.editnote
 
-import android.text.Layout
 import android.text.Selection
 import android.text.Spannable
 import android.text.method.ArrowKeyMovementMethod
@@ -24,7 +23,7 @@ class ClickableMovementMethod : ArrowKeyMovementMethod() {
 
             val link = buffer.getSpans(col, col, ClickableSpan::class.java)
 
-            if (link.size != 0) {
+            if (link.isNotEmpty()) {
                 if (action == MotionEvent.ACTION_UP) {
                     link[0].onClick(widget)
                 } else {

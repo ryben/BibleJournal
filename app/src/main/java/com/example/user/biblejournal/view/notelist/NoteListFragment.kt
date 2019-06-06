@@ -53,7 +53,7 @@ class NoteListFragment : Fragment(), NoteListAdapter.ListItemListener {
         floatingActionButton!!.setOnClickListener { noteListListener!!.startEditNote(null) }
 
         bibleViewModel = ViewModelProviders.of(Objects.requireNonNull<FragmentActivity>(activity)).get(BibleViewModel::class.java)
-        val notes = bibleViewModel!!.getAllNotes()
+        val notes = bibleViewModel!!.allNotes
 
         val noteListAdapter = NoteListAdapter(notes.value!!, this)
         noteListRecyclerView!!.adapter = noteListAdapter

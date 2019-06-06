@@ -12,16 +12,13 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-
 import com.example.user.biblejournal.R
 import com.example.user.biblejournal.viewmodel.BibleViewModel
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.util.Objects
 
 class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     private var editNoteListener: EditNoteListener? = null
@@ -33,11 +30,9 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     private var bibleReaderMini: View? = null
     private var textEditedDateTime: TextView? = null
 
-
     interface EditNoteListener {
         fun backPreviousScreen()
     }
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -52,14 +47,10 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        bibleViewModel = ViewModelProviders.of(Objects.requireNonNull<FragmentActivity>(activity)).get(BibleViewModel::class.java)
-
         val arguments = arguments
-        var noteId: Int? = null
-        if (null != arguments) {
-            noteId = arguments.getInt(ARG_NOTE_ID_KEY)
-        }
+        val noteId: Int? = arguments?.getInt(ARG_NOTE_ID_KEY)
 
+        bibleViewModel = activity?.let { ViewModelProviders.of(it).get(BibleViewModel::class.java) }
         bibleViewModel!!.startNote(noteId)
     }
 
@@ -189,14 +180,14 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
 
     companion object {
 
-        private val ARG_NOTE_ID_KEY = "ARG_NOTE_ID"
+        private const val ARG_NOTE_ID_KEY = "ARG_NOTE_ID"
 
         fun newInstance(noteId: Int?): EditNoteFragment {
             val editNoteFragment = EditNoteFragment()
 
             if (null != noteId) {
                 val args = Bundle()
-                args.putInt(EditNoteFragment.ARG_NOTE_ID_KEY, noteId)
+                args.putInt(ARG_NOTE_ID_KEY, noteId)
                 editNoteFragment.arguments = args
             }
 

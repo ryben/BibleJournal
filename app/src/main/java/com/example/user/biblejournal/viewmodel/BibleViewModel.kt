@@ -4,35 +4,21 @@ package com.example.user.biblejournal.viewmodel
 import android.app.Application
 import android.util.Pair
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-
 import com.example.user.biblejournal.model.Repository
-import com.example.user.biblejournal.model.database.note.NoteEntity
 import com.example.user.biblejournal.model.database.bible.VerseEntity
+import com.example.user.biblejournal.model.database.note.NoteEntity
 import com.example.user.biblejournal.model.note.NoteState
-
-import java.util.ArrayList
+import java.util.*
 
 class BibleViewModel(app: Application) : AndroidViewModel(app), Repository.NotesRepositoryListener, Repository.VerseRepositoryListener {
-    private val repository: Repository
-    val currentNote: MediatorLiveData<NoteEntity>
-    private val allNotes: MediatorLiveData<List<NoteEntity>>
-    val textSpannables: MediatorLiveData<List<Pair<Int, Int>>>
+    private val repository: Repository = Repository(app)
+    val currentNote: MediatorLiveData<NoteEntity> = MediatorLiveData()
+    val allNotes: MediatorLiveData<List<NoteEntity>> = MediatorLiveData()
+    val textSpannables: MediatorLiveData<List<Pair<Int, Int>>> = MediatorLiveData()
 
     init {
-        repository = Repository(app)
-
-        val noteEntities = ArrayList<NoteEntity>()
-        allNotes = MediatorLiveData()
-        allNotes.value = noteEntities
-
-        currentNote = MediatorLiveData()
-        textSpannables = MediatorLiveData()
-    }
-
-    fun getAllNotes(): LiveData<List<NoteEntity>> {
-        return allNotes
+        allNotes.value = ArrayList()
     }
 
     fun readAllNotes() {
@@ -78,7 +64,7 @@ class BibleViewModel(app: Application) : AndroidViewModel(app), Repository.Notes
 
     fun findSpannables(s: CharSequence, start: Int, count: Int) {
         val spannables = repository.findSpannables(s, start, count)
-        if (!spannables.isEmpty()) {
+        if (spannables.isNotEmpty()) {
             textSpannables.value = spannables
         }
     }
