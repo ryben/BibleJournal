@@ -3,17 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#272822"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#272822">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_view_array_yellow_36dp"
-        app:backgroundTint="#AEE4FF"
+        app:backgroundTint="#DCE3F7"
         app:fabCustomSize="40dp"
-
         app:layout_anchor="@id/bottom_app_bar" />
 
     <androidx.core.widget.NestedScrollView
@@ -76,14 +75,14 @@
         android:id="@+id/bottom_app_bar"
         style="@style/Widget.MaterialComponents.BottomAppBar"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="55dp"
         android:layout_gravity="bottom"
-        android:background="#000"
+        android:backgroundTint="#181815"
         android:clickable="true"
-        app:fabCradleVerticalOffset="0dp"
         android:focusable="true"
         app:fabAnimationMode="slide"
         app:fabCradleMargin="6dp"
+        app:fabCradleVerticalOffset="0dp"
         app:navigationIcon="@drawable/ic_save_gray_30dp" />
 
 
@@ -103,13 +102,13 @@
         android:id="@+id/bible_mini_bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="180dp"
+        android:layout_margin="10dp"
         android:background="@drawable/layout_bg"
         android:focusable="true"
         android:orientation="vertical"
         android:padding="8dp"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
-        android:layout_margin="10dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -118,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:textColor="#CCF"
+            android:textColor="#DCE3F7"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

@@ -85,7 +85,7 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
 
 
     override fun onClickableSpanClick(verseAddress: VerseAddress) {
-//        textEditedDateTime?.requestFocus()
+        textEditedDateTime?.requestFocus()
 
         bibleViewModel?.readVerse(verseAddress)
 
