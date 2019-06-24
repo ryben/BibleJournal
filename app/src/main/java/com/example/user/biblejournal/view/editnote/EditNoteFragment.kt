@@ -3,6 +3,7 @@ package com.example.user.biblejournal.view.editnote
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputType
 import android.text.Spanned
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -84,7 +85,7 @@ class EditNoteFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
 
 
     override fun onClickableSpanClick(verseAddress: VerseAddress) {
-        textEditedDateTime?.requestFocus()
+//        textEditedDateTime?.requestFocus()
 
         bibleViewModel?.readVerse(verseAddress)
 

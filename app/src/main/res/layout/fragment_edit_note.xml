@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="#272822"
     android:layout_height="match_parent">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -10,8 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_view_array_yellow_36dp"
-        app:backgroundTint="#cac6b2"
-        app:fabCustomSize="45dp"
+        app:backgroundTint="#AEE4FF"
+        app:fabCustomSize="40dp"
+
         app:layout_anchor="@id/bottom_app_bar" />
 
     <androidx.core.widget.NestedScrollView
@@ -74,14 +76,15 @@
         android:id="@+id/bottom_app_bar"
         style="@style/Widget.MaterialComponents.BottomAppBar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="45dp"
         android:layout_gravity="bottom"
-        android:background="#111"
+        android:background="#000"
         android:clickable="true"
+        app:fabCradleVerticalOffset="0dp"
         android:focusable="true"
         app:fabAnimationMode="slide"
-        app:fabCradleMargin="7dp"
-        app:navigationIcon="@drawable/ic_save_yellow_36dp" />
+        app:fabCradleMargin="6dp"
+        app:navigationIcon="@drawable/ic_save_gray_30dp" />
 
 
     <TextView
@@ -100,12 +103,13 @@
         android:id="@+id/bible_mini_bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:background="#DDC"
+        android:background="@drawable/layout_bg"
         android:focusable="true"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:padding="8dp"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
+        android:layout_margin="10dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -114,7 +118,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:textColor="#004"
+            android:textColor="#CCF"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +139,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="28dp"
             android:layout_marginBottom="8dp"
             android:fillViewport="true"
             app:layout_constraintTop_toBottomOf="@id/verse_address">
@@ -147,7 +152,7 @@
                 android:layout_marginEnd="7dp"
                 android:fontFamily="sans-serif-condensed"
                 android:textAlignment="center"
-                android:textColor="#112"
+                android:textColor="#CCC"
                 android:textSize="17sp"
                 tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." />
 
