@@ -4,10 +4,11 @@ import android.util.SparseArray
 import com.example.user.biblejournal.model.data.LocatedVerseAddress
 import com.example.user.biblejournal.model.data.VerseAddress
 import com.example.user.biblejournal.model.data.VerseInfo
-import com.example.user.biblejournal.model.database.AppDb
-import com.example.user.biblejournal.model.database.bible.BookNameDao
-import com.example.user.biblejournal.model.database.bible.MaxVerseDao
-import com.example.user.biblejournal.model.database.bible.VerseDao
+import com.example.user.biblejournal.database.AppDb
+import com.example.user.biblejournal.reader.local.dao.BookNameDao
+import com.example.user.biblejournal.reader.local.dao.MaxVerseDao
+import com.example.user.biblejournal.reader.local.dao.VerseDao
+import com.example.user.biblejournal.editnote.repository.Repository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
