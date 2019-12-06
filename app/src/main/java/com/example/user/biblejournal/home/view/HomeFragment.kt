@@ -5,24 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.user.biblejournal.R
 import com.example.user.biblejournal.core.ui.BaseFragment
 import com.example.user.biblejournal.editnote.viewmodel.BibleViewModel
 import com.example.user.biblejournal.home.view.adapter.NoteListAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.fragment_note_list.*
 
 
 class HomeFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListener {
 
-    private var floatingActionButton: FloatingActionButton? = null
     private var bibleViewModel: BibleViewModel? = null
-    private var noteListRecyclerView: RecyclerView? = null
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -31,17 +25,15 @@ class HomeFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        floatingActionButton = view.findViewById(R.id.button_add_note)
-        noteListRecyclerView = view.findViewById(R.id.note_list_recycler_view)
+        bibleViewModel = ViewModelProvider(activity!!).get(BibleViewModel::class.java)
 
-        bibleViewModel = ViewModelProviders.of(activity!!).get(BibleViewModel::class.java)
         val notes = bibleViewModel!!.allNotes
 
         val noteListAdapter = NoteListAdapter(this, notes.value!!)
-        noteListRecyclerView!!.adapter = noteListAdapter
-        noteListRecyclerView!!.layoutManager = LinearLayoutManager(view.context)
+        rvNoteList!!.adapter = noteListAdapter
+        rvNoteList!!.layoutManager = LinearLayoutManager(view.context)
 
-        notes.observe(this, Observer { noteEntities -> noteListAdapter.setNotes(noteEntities) })
+        notes.observe(viewLifecycleOwner, Observer { noteEntities -> noteListAdapter.setNotes(noteEntities) })
 
         bibleViewModel!!.readAllNotes()
     }

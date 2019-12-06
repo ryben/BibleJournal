@@ -22,7 +22,7 @@ allprojects {
         jcenter()
     }
 
-
+    apply plugin: 'kotlin-android-extensions'
     apply plugin: 'idea'
     idea {
         module {
