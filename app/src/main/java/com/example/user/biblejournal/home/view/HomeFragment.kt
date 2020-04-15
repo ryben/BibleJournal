@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.user.biblejournal.R
+import com.example.user.biblejournal.core.constants.ActivityConstants
 import com.example.user.biblejournal.core.ui.BaseFragment
 import com.example.user.biblejournal.editnote.viewmodel.BibleViewModel
 import com.example.user.biblejournal.home.view.adapter.NoteListAdapter
@@ -16,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_note_list.*
 
 class HomeFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListener {
 
-    private var bibleViewModel: BibleViewModel? = null
+    private lateinit var bibleViewModel: BibleViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -27,19 +28,20 @@ class HomeFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bibleViewModel = ViewModelProvider(activity!!).get(BibleViewModel::class.java)
 
-        val notes = bibleViewModel!!.allNotes
+        val notes = bibleViewModel.allNotes
 
         val noteListAdapter = NoteListAdapter(this, notes.value!!)
-        rvNoteList!!.adapter = noteListAdapter
-        rvNoteList!!.layoutManager = LinearLayoutManager(view.context)
+        rvNoteList.adapter = noteListAdapter
+        rvNoteList.layoutManager = LinearLayoutManager(view.context)
 
         notes.observe(viewLifecycleOwner, Observer { noteEntities -> noteListAdapter.setNotes(noteEntities) })
 
-        bibleViewModel!!.readAllNotes()
+        bibleViewModel.readAllNotes()
     }
 
-    override fun onNoteListItemClick() {
-        navigate(R.id.action_noteListFragment_to_editNoteFragment)
+    override fun onNoteListItemClick(noteId: Int) {
+        var bundle = Bundle()
+        bundle.putInt(ActivityConstants.ARG_EDIT_NOTE_ID, noteId)
+        navigate(R.id.action_noteListFragment_to_editNoteFragment, bundle)
     }
-
 }

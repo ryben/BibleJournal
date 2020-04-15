@@ -5,8 +5,8 @@ import com.example.user.biblejournal.model.data.LocatedVerseAddress
 import com.example.user.biblejournal.model.data.VerseAddress
 import com.example.user.biblejournal.model.data.VerseInfo
 import com.example.user.biblejournal.database.AppDb
-import com.example.user.biblejournal.database.note.NoteDao
-import com.example.user.biblejournal.database.note.NoteEntity
+import com.example.user.biblejournal.editnote.local.dao.NoteDao
+import com.example.user.biblejournal.editnote.local.entity.NoteEntity
 import com.example.user.biblejournal.model.BibleModel
 import com.example.user.biblejournal.model.note.NoteState
 import io.reactivex.Observable

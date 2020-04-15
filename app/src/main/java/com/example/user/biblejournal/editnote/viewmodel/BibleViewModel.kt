@@ -8,7 +8,7 @@ import com.example.user.biblejournal.model.data.LocatedVerseAddress
 import com.example.user.biblejournal.editnote.repository.Repository
 import com.example.user.biblejournal.model.data.VerseAddress
 import com.example.user.biblejournal.model.data.VerseInfo
-import com.example.user.biblejournal.database.note.NoteEntity
+import com.example.user.biblejournal.editnote.local.entity.NoteEntity
 import com.example.user.biblejournal.model.note.NoteState
 import java.util.*
 

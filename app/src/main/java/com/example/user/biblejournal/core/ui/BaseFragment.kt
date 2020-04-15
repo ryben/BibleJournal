@@ -19,4 +19,8 @@ open class BaseFragment : Fragment() {
     fun navigate(navId : Int) {
         navController.navigate(navId)
     }
+
+    fun navigate(navId : Int, bundle : Bundle) {
+        navController.navigate(navId, bundle)
+    }
 }

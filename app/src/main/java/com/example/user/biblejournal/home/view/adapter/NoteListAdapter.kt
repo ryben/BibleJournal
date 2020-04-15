@@ -7,8 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.user.biblejournal.R
-import com.example.user.biblejournal.database.note.NoteEntity
-import com.example.user.biblejournal.utils.StringUtil
+import com.example.user.biblejournal.editnote.local.entity.NoteEntity
+import com.example.user.biblejournal.core.util.StringUtil
 
 class NoteListAdapter(itemClickListener : NoteListItemClickListener, notes: List<NoteEntity>) : RecyclerView.Adapter<NoteListAdapter.MyViewHolder>() {
     private lateinit var notes: List<NoteEntity>
@@ -26,6 +26,7 @@ class NoteListAdapter(itemClickListener : NoteListItemClickListener, notes: List
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val note = notes!![position]
+        holder.noteId = position
         holder.textTitle.text = note.title
         holder.textCreationTime.text = note.dateCreated
 
@@ -45,10 +46,13 @@ class NoteListAdapter(itemClickListener : NoteListItemClickListener, notes: List
         return notes.size
     }
 
-
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        var noteId: Int? = null
+
         override fun onClick(p0: View?) {
-            itemClickListener.onNoteListItemClick();
+            if (noteId != null) {
+                itemClickListener.onNoteListItemClick(noteId!!)
+            }
         }
 
         var textTitle: TextView = itemView.findViewById(R.id.note_item_title)
@@ -58,11 +62,9 @@ class NoteListAdapter(itemClickListener : NoteListItemClickListener, notes: List
         init {
             itemView.setOnClickListener(this)
         }
-
     }
 
-
     interface NoteListItemClickListener {
-        fun onNoteListItemClick()
+        fun onNoteListItemClick(noteId : Int)
     }
 }

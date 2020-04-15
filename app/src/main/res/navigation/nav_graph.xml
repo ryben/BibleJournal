@@ -17,5 +17,9 @@
     <fragment
         android:id="@+id/editNoteFragment"
         android:name="com.example.user.biblejournal.editnote.view.EditNoteFragment"
-        android:label="EditNoteFragment" />
+        android:label="EditNoteFragment" >
+        <argument
+            android:name="noteId"
+            app:argType="long" />
+    </fragment>
 </navigation>

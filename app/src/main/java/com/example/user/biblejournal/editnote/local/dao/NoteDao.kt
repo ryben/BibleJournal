@@ -1,10 +1,11 @@
-package com.example.user.biblejournal.database.note
+package com.example.user.biblejournal.editnote.local.dao
 
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.example.user.biblejournal.editnote.local.entity.NoteEntity
 
 @Dao
 interface NoteDao {
