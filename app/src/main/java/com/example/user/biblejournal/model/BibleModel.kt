@@ -8,7 +8,7 @@ import com.example.user.biblejournal.database.AppDb
 import com.example.user.biblejournal.reader.local.dao.BookNameDao
 import com.example.user.biblejournal.reader.local.dao.MaxVerseDao
 import com.example.user.biblejournal.reader.local.dao.VerseDao
-import com.example.user.biblejournal.writer.repository.Repository
+import com.example.user.biblejournal.writer.repository.WriterRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -59,7 +59,7 @@ class BibleModel(db: AppDb) {
         return verseAddressParser.findSpannables(s, start, count)
     }
 
-    fun getVerseById(verseAddress: VerseAddress, listener: Repository.RepositoryListener) {
+    fun getVerseById(verseAddress: VerseAddress, listener: WriterRepository.RepositoryListener) {
         compositeDisposable.add(Observable.fromCallable { verseDao.getVerse(verseAddress.book, verseAddress.chapter, verseAddress.verse) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -14,7 +14,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class Repository(app: Application) {
+class WriterRepository(app: Application) {
     private val noteDao: NoteDao
     private val bibleModel: BibleModel
     private val compositeDisposable = CompositeDisposable()
