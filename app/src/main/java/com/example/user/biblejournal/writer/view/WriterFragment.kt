@@ -13,7 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.example.user.biblejournal.R
 import com.example.user.biblejournal.model.data.VerseAddress
 import com.example.user.biblejournal.writer.viewmodel.WriterViewModel
@@ -26,7 +26,7 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
 
     private var editNoteListener: EditNoteListener? = null
 
-    private var writerViewModel: WriterViewModel? = null
+    private lateinit var writerViewModel: WriterViewModel
     private var editTitle: EditText? = null
     private var editContent: EditText? = null
     private var floatingActionButton: FloatingActionButton? = null
@@ -72,9 +72,8 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
 
         val arguments = arguments
         val noteId: Int? = arguments?.getInt(ARG_NOTE_ID_KEY)
-
-        writerViewModel = activity?.let { ViewModelProviders.of(it).get(WriterViewModel::class.java) }
-        writerViewModel!!.startNote(noteId)
+        writerViewModel = ViewModelProvider(activity!!).get(WriterViewModel::class.java)
+        writerViewModel.startNote(noteId)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -86,7 +85,7 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     override fun onClickableSpanClick(verseAddress: VerseAddress) {
         textEditedDateTime?.requestFocus()
 
-        writerViewModel?.readVerse(verseAddress)
+        writerViewModel.readVerse(verseAddress)
 
         floatingActionButton?.performClick()
     }
@@ -115,21 +114,21 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
                 }
 
 
-                writerViewModel?.findSpannables(s, start, count)
+                writerViewModel.findSpannables(s, start, count)
             }
 
             override fun afterTextChanged(s: Editable) {
             }
         })
 
-        val currentNote = writerViewModel!!.currentNote
-        currentNote.observe(this, Observer { noteEntity ->
+        val currentNote = writerViewModel.currentNote
+        currentNote.observe(viewLifecycleOwner, Observer { noteEntity ->
             editTitle!!.setText(noteEntity.title)
             editContent!!.setText(noteEntity.content)
         })
 
         // Set behavior when verses are detected
-        writerViewModel!!.textSpannables.observe(this, Observer { locatedVerseAddresses ->
+        writerViewModel.textSpannables.observe(viewLifecycleOwner, Observer { locatedVerseAddresses ->
             for (address in locatedVerseAddresses) {
                 //  remove existing spans within the range
                 val existingSpans = this@WriterFragment.editContent!!.text.getSpans(address.startIndex, address.endIndex, MyClickableSpan::class.java)
@@ -163,7 +162,7 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
 
-        writerViewModel!!.verseToShow.observe(this, Observer { verseInfo ->
+        writerViewModel.verseToShow.observe(viewLifecycleOwner, Observer { verseInfo ->
             verseContent?.text = verseInfo.content
             val fullVerseAddress = "${verseInfo.bookName} ${verseInfo.verseAddress.chapter}:${verseInfo.verseAddress.verse}"
             verseAddress?.text = fullVerseAddress
@@ -174,19 +173,19 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
         val bottomAppBar = view.findViewById<BottomAppBar>(R.id.bottom_app_bar)
         bottomAppBar.setNavigationOnClickListener {
             recordCurrentNote()
-            writerViewModel!!.saveNote()
+            writerViewModel.saveNote()
             editNoteListener!!.backPreviousScreen()
         }
         bottomAppBar.inflateMenu(R.menu.edit_note_menu)
         bottomAppBar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_archive -> {
-                    writerViewModel!!.archiveNote()
+                    writerViewModel.archiveNote()
                     editNoteListener!!.backPreviousScreen()
                     Toast.makeText(activity, "Note archived", Toast.LENGTH_SHORT).show()
                 }
                 R.id.action_delete -> {
-                    writerViewModel!!.deleteNote()
+                    writerViewModel.deleteNote()
                     editNoteListener!!.backPreviousScreen()
                     Toast.makeText(activity, "Note deleted", Toast.LENGTH_SHORT).show()
                 }
@@ -197,7 +196,7 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     }
 
     private fun recordCurrentNote() {
-        val currentNote = writerViewModel!!.currentNote.value
+        val currentNote = writerViewModel.currentNote.value
         currentNote!!.title = editTitle!!.text.toString()
         currentNote.content = editContent!!.text.toString()
     }
@@ -205,18 +204,18 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     override fun onPause() {
         super.onPause()
         recordCurrentNote()
-        writerViewModel!!.saveNote()
+        writerViewModel.saveNote()
     }
 
     override fun onStop() {
         super.onStop()
         recordCurrentNote()
-        writerViewModel!!.saveNote()
+        writerViewModel.saveNote()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        writerViewModel?.clearSpannables()
+        writerViewModel.clearSpannables()
     }
 
 
