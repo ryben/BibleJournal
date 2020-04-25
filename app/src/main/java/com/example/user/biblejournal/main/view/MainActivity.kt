@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.user.biblejournal.R
-import com.example.user.biblejournal.editnote.view.EditNoteFragment
+import com.example.user.biblejournal.writer.view.WriterFragment
 
-class MainActivity : AppCompatActivity(), EditNoteFragment.EditNoteListener {
+class MainActivity : AppCompatActivity(), WriterFragment.EditNoteListener {
     override fun backPreviousScreen() {
 
     }

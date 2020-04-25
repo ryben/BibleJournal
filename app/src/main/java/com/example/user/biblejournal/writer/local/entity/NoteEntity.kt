@@ -1,4 +1,4 @@
-package com.example.user.biblejournal.editnote.local.entity
+package com.example.user.biblejournal.writer.local.entity
 
 
 import androidx.room.ColumnInfo

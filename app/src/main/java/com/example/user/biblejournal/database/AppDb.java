@@ -14,8 +14,8 @@ import com.example.user.biblejournal.reader.local.dao.MaxVerseDao;
 import com.example.user.biblejournal.reader.local.entity.MaxVerseEntity;
 import com.example.user.biblejournal.reader.local.dao.VerseDao;
 import com.example.user.biblejournal.reader.local.entity.VerseEntity;
-import com.example.user.biblejournal.editnote.local.dao.NoteDao;
-import com.example.user.biblejournal.editnote.local.entity.NoteEntity;
+import com.example.user.biblejournal.writer.local.dao.NoteDao;
+import com.example.user.biblejournal.writer.local.entity.NoteEntity;
 
 @Database(entities = {VerseEntity.class, NoteEntity.class, BookNameEntity.class, MaxVerseEntity.class}, version = 2)
 public abstract class AppDb extends RoomDatabase {

@@ -8,7 +8,7 @@ import com.example.user.biblejournal.database.AppDb
 import com.example.user.biblejournal.reader.local.dao.BookNameDao
 import com.example.user.biblejournal.reader.local.dao.MaxVerseDao
 import com.example.user.biblejournal.reader.local.dao.VerseDao
-import com.example.user.biblejournal.editnote.repository.Repository
+import com.example.user.biblejournal.writer.repository.Repository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

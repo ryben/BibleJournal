@@ -1,12 +1,12 @@
-package com.example.user.biblejournal.editnote.repository
+package com.example.user.biblejournal.writer.repository
 
 import android.app.Application
 import com.example.user.biblejournal.model.data.LocatedVerseAddress
 import com.example.user.biblejournal.model.data.VerseAddress
 import com.example.user.biblejournal.model.data.VerseInfo
 import com.example.user.biblejournal.database.AppDb
-import com.example.user.biblejournal.editnote.local.dao.NoteDao
-import com.example.user.biblejournal.editnote.local.entity.NoteEntity
+import com.example.user.biblejournal.writer.local.dao.NoteDao
+import com.example.user.biblejournal.writer.local.entity.NoteEntity
 import com.example.user.biblejournal.model.BibleModel
 import com.example.user.biblejournal.model.note.NoteState
 import io.reactivex.Observable

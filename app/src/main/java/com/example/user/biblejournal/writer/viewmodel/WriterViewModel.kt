@@ -1,18 +1,18 @@
-package com.example.user.biblejournal.editnote.viewmodel
+package com.example.user.biblejournal.writer.viewmodel
 
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MediatorLiveData
 import com.example.user.biblejournal.model.data.LocatedVerseAddress
-import com.example.user.biblejournal.editnote.repository.Repository
+import com.example.user.biblejournal.writer.repository.Repository
 import com.example.user.biblejournal.model.data.VerseAddress
 import com.example.user.biblejournal.model.data.VerseInfo
-import com.example.user.biblejournal.editnote.local.entity.NoteEntity
+import com.example.user.biblejournal.writer.local.entity.NoteEntity
 import com.example.user.biblejournal.model.note.NoteState
 import java.util.*
 
-class BibleViewModel(app: Application) : AndroidViewModel(app), Repository.RepositoryListener {
+class WriterViewModel(app: Application) : AndroidViewModel(app), Repository.RepositoryListener {
     private val repository: Repository = Repository(app)
     val currentNote: MediatorLiveData<NoteEntity> = MediatorLiveData()
     val allNotes: MediatorLiveData<List<NoteEntity>> = MediatorLiveData()

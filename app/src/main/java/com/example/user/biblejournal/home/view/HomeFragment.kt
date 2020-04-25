@@ -10,14 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.user.biblejournal.R
 import com.example.user.biblejournal.core.constants.ActivityConstants
 import com.example.user.biblejournal.core.ui.BaseFragment
-import com.example.user.biblejournal.editnote.viewmodel.BibleViewModel
+import com.example.user.biblejournal.writer.viewmodel.WriterViewModel
 import com.example.user.biblejournal.home.view.adapter.NoteListAdapter
 import kotlinx.android.synthetic.main.fragment_note_list.*
 
 
 class HomeFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListener {
 
-    private lateinit var bibleViewModel: BibleViewModel
+    private lateinit var writerViewModel: WriterViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -26,9 +26,9 @@ class HomeFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        bibleViewModel = ViewModelProvider(activity!!).get(BibleViewModel::class.java)
+        writerViewModel = ViewModelProvider(activity!!).get(WriterViewModel::class.java)
 
-        val notes = bibleViewModel.allNotes
+        val notes = writerViewModel.allNotes
 
         val noteListAdapter = NoteListAdapter(this, notes.value!!)
         rvNoteList.adapter = noteListAdapter
@@ -36,11 +36,11 @@ class HomeFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListener {
 
         notes.observe(viewLifecycleOwner, Observer { noteEntities -> noteListAdapter.setNotes(noteEntities) })
 
-        bibleViewModel.readAllNotes()
+        writerViewModel.readAllNotes()
     }
 
     override fun onNoteListItemClick(noteId: Int) {
-        var bundle = Bundle()
+        val bundle = Bundle()
         bundle.putInt(ActivityConstants.ARG_EDIT_NOTE_ID, noteId)
         navigate(R.id.action_noteListFragment_to_editNoteFragment, bundle)
     }

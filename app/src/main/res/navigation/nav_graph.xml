@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/editNoteFragment"
-        android:name="com.example.user.biblejournal.editnote.view.EditNoteFragment"
+        android:name="com.example.user.biblejournal.writer.view.WriterFragment"
         android:label="EditNoteFragment" >
         <argument
             android:name="noteId"

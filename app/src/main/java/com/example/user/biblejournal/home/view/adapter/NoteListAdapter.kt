@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.user.biblejournal.R
-import com.example.user.biblejournal.editnote.local.entity.NoteEntity
+import com.example.user.biblejournal.writer.local.entity.NoteEntity
 import com.example.user.biblejournal.core.util.StringUtil
 
 class NoteListAdapter(itemClickListener : NoteListItemClickListener, notes: List<NoteEntity>) : RecyclerView.Adapter<NoteListAdapter.MyViewHolder>() {
