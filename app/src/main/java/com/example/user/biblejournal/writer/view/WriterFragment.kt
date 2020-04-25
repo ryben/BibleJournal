@@ -22,13 +22,11 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
-
-
     private var editNoteListener: EditNoteListener? = null
 
     private lateinit var writerViewModel: WriterViewModel
-    private var editTitle: EditText? = null
-    private var editContent: EditText? = null
+    private lateinit var editTitle: EditText
+    private lateinit var editContent: EditText
     private var floatingActionButton: FloatingActionButton? = null
     private var bibleReaderMini: View? = null
     private var verseContent: TextView? = null
@@ -101,16 +99,16 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
         verseContent = view.findViewById(R.id.verse_content)
         verseAddress = view.findViewById(R.id.verse_address)
 
-        editContent?.movementMethod = ClickableMovementMethod.instance
-        editContent?.addTextChangedListener(object : TextWatcher {
+        editContent.movementMethod = ClickableMovementMethod.instance
+        editContent.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 //  remove existing spans within the range
-                val existingSpans = this@WriterFragment.editContent!!.text.getSpans(start, start + count, MyClickableSpan::class.java)
+                val existingSpans = this@WriterFragment.editContent.text.getSpans(start, start + count, MyClickableSpan::class.java)
                 for (span in existingSpans) {
-                    editContent!!.text.removeSpan(span)
+                    editContent.text.removeSpan(span)
                 }
 
 
@@ -123,21 +121,21 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
 
         val currentNote = writerViewModel.currentNote
         currentNote.observe(viewLifecycleOwner, Observer { noteEntity ->
-            editTitle!!.setText(noteEntity.title)
-            editContent!!.setText(noteEntity.content)
+            editTitle.setText(noteEntity.title)
+            editContent.setText(noteEntity.content)
         })
 
         // Set behavior when verses are detected
         writerViewModel.textSpannables.observe(viewLifecycleOwner, Observer { locatedVerseAddresses ->
             for (address in locatedVerseAddresses) {
                 //  remove existing spans within the range
-                val existingSpans = this@WriterFragment.editContent!!.text.getSpans(address.startIndex, address.endIndex, MyClickableSpan::class.java)
+                val existingSpans = this@WriterFragment.editContent.text.getSpans(address.startIndex, address.endIndex, MyClickableSpan::class.java)
                 for (span in existingSpans) {
-                    editContent!!.text.removeSpan(span)
+                    editContent.text.removeSpan(span)
                 }
 
                 val span = MyClickableSpan(this@WriterFragment, address.verseAddress)
-                editContent!!.text.setSpan(
+                editContent.text.setSpan(
                         span,
                         address.startIndex,
                         address.endIndex,
@@ -197,8 +195,8 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
 
     private fun recordCurrentNote() {
         val currentNote = writerViewModel.currentNote.value
-        currentNote!!.title = editTitle!!.text.toString()
-        currentNote.content = editContent!!.text.toString()
+        currentNote?.title = editTitle.text.toString()
+        currentNote?.content = editContent.text.toString()
     }
 
     override fun onPause() {
