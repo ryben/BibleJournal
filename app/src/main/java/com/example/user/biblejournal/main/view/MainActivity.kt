@@ -9,7 +9,7 @@ import com.example.user.biblejournal.writer.view.WriterFragment
 
 class MainActivity : AppCompatActivity(), WriterFragment.EditNoteListener {
     override fun backPreviousScreen() {
-
+        navController.popBackStack()
     }
 
     lateinit var navController: NavController

@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.user.biblejournal.R
+import com.example.user.biblejournal.core.util.Utils
 import com.example.user.biblejournal.model.data.VerseAddress
 import com.example.user.biblejournal.writer.viewmodel.WriterViewModel
 import com.google.android.material.bottomappbar.BottomAppBar
@@ -57,8 +58,7 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val arguments = arguments
-        val noteId: Int? = arguments?.getInt(ARG_NOTE_ID_KEY)
+        val noteId: Int? = if (arguments!!.containsKey(ARG_NOTE_ID_KEY)) arguments!!.getInt(ARG_NOTE_ID_KEY) else null
         writerViewModel = ViewModelProvider(activity!!).get(WriterViewModel::class.java)
         writerViewModel.startNote(noteId)
     }
@@ -88,8 +88,6 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
                 for (span in existingSpans) {
                     editItemContent.text.removeSpan(span)
                 }
-
-
                 writerViewModel.findSpannables(s, start, count)
             }
 
@@ -149,6 +147,7 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
         val bottomAppBar = view.findViewById<BottomAppBar>(R.id.bottom_app_bar)
         bottomAppBar.setNavigationOnClickListener {
             recordCurrentNote()
+            Utils.hideKeyboard(activity)
             writerViewModel.saveNote()
             editNoteListener!!.backPreviousScreen()
         }

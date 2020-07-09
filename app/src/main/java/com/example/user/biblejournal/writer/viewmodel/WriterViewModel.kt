@@ -4,6 +4,7 @@ package com.example.user.biblejournal.writer.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MediatorLiveData
+import com.example.user.biblejournal.core.util.Utils
 import com.example.user.biblejournal.model.data.LocatedVerseAddress
 import com.example.user.biblejournal.writer.repository.WriterRepository
 import com.example.user.biblejournal.model.data.VerseAddress
