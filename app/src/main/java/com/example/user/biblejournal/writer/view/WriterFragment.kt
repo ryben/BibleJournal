@@ -170,6 +170,8 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
         }
     }
 
+
+
     private fun recordCurrentNote() {
         val currentNote = writerViewModel.currentNote.value
         currentNote?.title = editItemTitle.text.toString()
