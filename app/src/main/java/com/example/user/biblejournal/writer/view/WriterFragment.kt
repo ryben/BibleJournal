@@ -8,8 +8,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,22 +17,14 @@ import com.example.user.biblejournal.model.data.VerseAddress
 import com.example.user.biblejournal.writer.viewmodel.WriterViewModel
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_edit_note.*
 
 class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     private var editNoteListener: EditNoteListener? = null
 
     private lateinit var writerViewModel: WriterViewModel
-    private lateinit var editContent: EditText
-    private var floatingActionButton: FloatingActionButton? = null
-    private var bibleReaderMini: View? = null
-    private var verseContent: TextView? = null
-    private var verseAddress: TextView? = null
-    private var textEditedDateTime: TextView? = null
 
     companion object {
-
         private const val ARG_NOTE_ID_KEY = "ARG_NOTE_ID"
 
         fun newInstance(noteId: Int?): WriterFragment {
@@ -49,7 +39,6 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
             return editNoteFragment
         }
     }
-
 
     interface EditNoteListener {
         fun backPreviousScreen()
@@ -79,35 +68,25 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
         return inflater.inflate(R.layout.fragment_edit_note, container, false)
     }
 
-
     override fun onClickableSpanClick(verseAddress: VerseAddress) {
         textEditedDateTime?.requestFocus()
-
         writerViewModel.readVerse(verseAddress)
-
-        floatingActionButton?.performClick()
+        fab?.performClick()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        editContent = view.findViewById(R.id.note_item_content)
-        textEditedDateTime = view.findViewById(R.id.text_edited_datetime)
-        floatingActionButton = view.findViewById(R.id.floating_action_button)
-        bibleReaderMini = view.findViewById(R.id.bible_mini_bottom_sheet)
-        verseContent = view.findViewById(R.id.verse_content)
-        verseAddress = view.findViewById(R.id.verse_address)
-
-        editContent.movementMethod = ClickableMovementMethod.instance
-        editContent.addTextChangedListener(object : TextWatcher {
+        editItemContent.movementMethod = ClickableMovementMethod.instance
+        editItemContent.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 //  remove existing spans within the range
-                val existingSpans = this@WriterFragment.editContent.text.getSpans(start, start + count, MyClickableSpan::class.java)
+                val existingSpans = this@WriterFragment.editItemContent.text.getSpans(start, start + count, MyClickableSpan::class.java)
                 for (span in existingSpans) {
-                    editContent.text.removeSpan(span)
+                    editItemContent.text.removeSpan(span)
                 }
 
 
@@ -121,20 +100,20 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
         val currentNote = writerViewModel.currentNote
         currentNote.observe(viewLifecycleOwner, Observer { noteEntity ->
             editItemTitle.setText(noteEntity.title)
-            editContent.setText(noteEntity.content)
+            editItemContent.setText(noteEntity.content)
         })
 
         // Set behavior when verses are detected
         writerViewModel.textSpannables.observe(viewLifecycleOwner, Observer { locatedVerseAddresses ->
             for (address in locatedVerseAddresses) {
                 //  remove existing spans within the range
-                val existingSpans = this@WriterFragment.editContent.text.getSpans(address.startIndex, address.endIndex, MyClickableSpan::class.java)
+                val existingSpans = this@WriterFragment.editItemContent.text.getSpans(address.startIndex, address.endIndex, MyClickableSpan::class.java)
                 for (span in existingSpans) {
-                    editContent.text.removeSpan(span)
+                    editItemContent.text.removeSpan(span)
                 }
 
                 val span = MyClickableSpan(this@WriterFragment, address.verseAddress)
-                editContent.text.setSpan(
+                editItemContent.text.setSpan(
                         span,
                         address.startIndex,
                         address.endIndex,
@@ -143,16 +122,16 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
         })
 
         // Setup Bottom Sheet
-        val behavior = BottomSheetBehavior.from(bibleReaderMini!!)
-        floatingActionButton!!.setOnClickListener {
-            floatingActionButton!!.hide()
+        val behavior = BottomSheetBehavior.from(bibleMiniBottomSheet!!)
+        fab!!.setOnClickListener {
+            fab!!.hide()
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
         behavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                    floatingActionButton!!.show()
+                    fab!!.show()
                 }
             }
 
@@ -160,9 +139,9 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
         })
 
         writerViewModel.verseToShow.observe(viewLifecycleOwner, Observer { verseInfo ->
-            verseContent?.text = verseInfo.content
+            textVerseContent?.text = verseInfo.content
             val fullVerseAddress = "${verseInfo.bookName} ${verseInfo.verseAddress.chapter}:${verseInfo.verseAddress.verse}"
-            verseAddress?.text = fullVerseAddress
+            textVerseAddress?.text = fullVerseAddress
         })
 
 
@@ -195,7 +174,7 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     private fun recordCurrentNote() {
         val currentNote = writerViewModel.currentNote.value
         currentNote?.title = editItemTitle.text.toString()
-        currentNote?.content = editContent.text.toString()
+        currentNote?.content = editItemContent.text.toString()
     }
 
     override fun onPause() {

@@ -7,7 +7,7 @@
     android:background="#272822">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floating_action_button"
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_view_array_yellow_36dp"
@@ -41,7 +41,7 @@
                 tools:text="Note Title" />
 
             <TextView
-                android:id="@+id/note_item_creation_date"
+                android:id="@+id/textCreationDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -51,7 +51,7 @@
                 tools:text="May 12, 2019  8:00 AM" />
 
             <EditText
-                android:id="@+id/note_item_content"
+                android:id="@+id/editItemContent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
@@ -87,7 +87,7 @@
 
 
     <TextView
-        android:id="@+id/text_edited_datetime"
+        android:id="@+id/textEditedDateTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
@@ -99,7 +99,7 @@
         tools:text="Edited Today 8:20 am" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/bible_mini_bottom_sheet"
+        android:id="@+id/bibleMiniBottomSheet"
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:layout_margin="10dp"
@@ -113,7 +113,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
-            android:id="@+id/verse_address"
+            android:id="@+id/textVerseAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
@@ -141,10 +141,10 @@
             android:layout_marginTop="28dp"
             android:layout_marginBottom="8dp"
             android:fillViewport="true"
-            app:layout_constraintTop_toBottomOf="@id/verse_address">
+            app:layout_constraintTop_toBottomOf="@id/textVerseAddress">
 
             <TextView
-                android:id="@+id/verse_content"
+                android:id="@+id/textVerseContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="7dp"
