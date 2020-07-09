@@ -55,7 +55,7 @@ class NoteListAdapter(itemClickListener : NoteListItemClickListener, notes: List
             }
         }
 
-        var textTitle: TextView = itemView.findViewById(R.id.note_item_title)
+        var textTitle: TextView = itemView.findViewById(R.id.editItemTitle)
         var textTags: TextView = itemView.findViewById(R.id.note_item_tags)
         var textCreationTime: TextView = itemView.findViewById(R.id.note_item_creation_time)
 

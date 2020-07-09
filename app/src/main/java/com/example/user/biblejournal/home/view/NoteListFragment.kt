@@ -15,9 +15,10 @@ import com.example.user.biblejournal.home.view.adapter.NoteListAdapter
 import kotlinx.android.synthetic.main.fragment_note_list.*
 
 
-class HomeFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListener {
+class NoteListFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListener {
 
     private lateinit var writerViewModel: WriterViewModel
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -37,6 +38,10 @@ class HomeFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListener {
         notes.observe(viewLifecycleOwner, Observer { noteEntities -> noteListAdapter.setNotes(noteEntities) })
 
         writerViewModel.readAllNotes()
+
+        btnAddNote.setOnClickListener {
+            navigate(R.id.action_noteListFragment_to_editNoteFragment)
+        }
     }
 
     override fun onNoteListItemClick(noteId: Int) {

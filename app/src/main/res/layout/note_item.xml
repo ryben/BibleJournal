@@ -18,7 +18,7 @@
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/note_item_title"
+            android:id="@+id/editItemTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
@@ -52,7 +52,7 @@
             android:textColor="#000"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/note_item_title"
+            app:layout_constraintTop_toBottomOf="@id/editItemTitle"
             tools:text="Tags" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

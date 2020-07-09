@@ -45,7 +45,9 @@ class WriterViewModel(app: Application) : AndroidViewModel(app), WriterRepositor
     }
 
     fun saveNote() {
-        if (NoteState.NEW.toString() == currentNote.value!!.state) {
+        if (currentNote.value == null) {
+            // TODO: Error handling
+        } else if (NoteState.NEW.toString() == currentNote.value?.state) {
             if ("" != currentNote.value!!.title || "" != currentNote.value!!.content) {
                 writerRepository.insertNote(currentNote.value!!)
             }

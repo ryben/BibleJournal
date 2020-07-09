@@ -20,12 +20,12 @@ import com.example.user.biblejournal.writer.viewmodel.WriterViewModel
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.fragment_edit_note.*
 
 class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     private var editNoteListener: EditNoteListener? = null
 
     private lateinit var writerViewModel: WriterViewModel
-    private lateinit var editTitle: EditText
     private lateinit var editContent: EditText
     private var floatingActionButton: FloatingActionButton? = null
     private var bibleReaderMini: View? = null
@@ -91,7 +91,6 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        editTitle = view.findViewById(R.id.note_item_title)
         editContent = view.findViewById(R.id.note_item_content)
         textEditedDateTime = view.findViewById(R.id.text_edited_datetime)
         floatingActionButton = view.findViewById(R.id.floating_action_button)
@@ -121,7 +120,7 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
 
         val currentNote = writerViewModel.currentNote
         currentNote.observe(viewLifecycleOwner, Observer { noteEntity ->
-            editTitle.setText(noteEntity.title)
+            editItemTitle.setText(noteEntity.title)
             editContent.setText(noteEntity.content)
         })
 
@@ -195,7 +194,7 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
 
     private fun recordCurrentNote() {
         val currentNote = writerViewModel.currentNote.value
-        currentNote?.title = editTitle.text.toString()
+        currentNote?.title = editItemTitle.text.toString()
         currentNote?.content = editContent.text.toString()
     }
 
