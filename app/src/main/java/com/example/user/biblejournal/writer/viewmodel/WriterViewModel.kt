@@ -29,7 +29,7 @@ class WriterViewModel(app: Application) : AndroidViewModel(app), WriterRepositor
         writerRepository.readAllNotes(this)
     }
 
-    fun startNote(noteId: Int?) {
+    fun startNote(noteId: Long?) {
         if (null == noteId) {
             currentNote.setValue(NoteEntity.newInstance())
         } else {

@@ -19,5 +19,5 @@ interface NoteDao {
     fun updateNote(noteEntity: NoteEntity)
 
     @Query("SELECT id, title, content, dateCreated, dateEdited, state, tags from NoteEntity where id = :id")
-    fun getNoteById(id: Int): NoteEntity
+    fun getNoteById(id: Long): NoteEntity
 }

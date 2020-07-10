@@ -44,7 +44,7 @@ class WriterRepository(app: Application) {
                 }, {}))
     }
 
-    fun getNoteById(id: Int, listener: RepositoryListener) {
+    fun getNoteById(id: Long, listener: RepositoryListener) {
         compositeDisposable.add(Observable.fromCallable { noteDao.getNoteById(id) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

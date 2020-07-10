@@ -25,22 +25,6 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
 
     private lateinit var writerViewModel: WriterViewModel
 
-    companion object {
-        private const val ARG_NOTE_ID_KEY = "ARG_NOTE_ID"
-
-        fun newInstance(noteId: Int?): WriterFragment {
-            val editNoteFragment = WriterFragment()
-
-            if (null != noteId) {
-                val args = Bundle()
-                args.putInt(ARG_NOTE_ID_KEY, noteId)
-                editNoteFragment.arguments = args
-            }
-
-            return editNoteFragment
-        }
-    }
-
     interface EditNoteListener {
         fun backPreviousScreen()
     }
@@ -58,7 +42,8 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val noteId: Int? = if (arguments!!.containsKey(ARG_NOTE_ID_KEY)) arguments!!.getInt(ARG_NOTE_ID_KEY) else null
+        val noteId = WriterFragmentArgs.fromBundle(requireArguments()).noteId
+
         writerViewModel = ViewModelProvider(activity!!).get(WriterViewModel::class.java)
         writerViewModel.startNote(noteId)
     }

@@ -12,13 +12,12 @@ import com.example.user.biblejournal.core.constants.ActivityConstants
 import com.example.user.biblejournal.core.ui.BaseFragment
 import com.example.user.biblejournal.writer.viewmodel.WriterViewModel
 import com.example.user.biblejournal.home.view.adapter.NoteListAdapter
+import com.example.user.biblejournal.writer.view.WriterFragmentArgs
 import kotlinx.android.synthetic.main.fragment_note_list.*
 
 
 class NoteListFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListener {
-
     private lateinit var writerViewModel: WriterViewModel
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -27,7 +26,7 @@ class NoteListFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListen
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        writerViewModel = ViewModelProvider(activity!!).get(WriterViewModel::class.java)
+        writerViewModel = ViewModelProvider(requireActivity()).get(WriterViewModel::class.java)
 
         val notes = writerViewModel.allNotes
 
@@ -40,13 +39,11 @@ class NoteListFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListen
         writerViewModel.readAllNotes()
 
         btnAddNote.setOnClickListener {
-            navigate(R.id.action_noteListFragment_to_editNoteFragment)
+            navigate(R.id.action_noteListFragment_to_writerFragment)
         }
     }
 
-    override fun onNoteListItemClick(noteId: Int) {
-        val bundle = Bundle()
-        bundle.putInt(ActivityConstants.ARG_EDIT_NOTE_ID, noteId)
-        navigate(R.id.action_noteListFragment_to_editNoteFragment, bundle)
+    override fun onNoteListItemClick(noteId: Long) {
+        navigate(NoteListFragmentDirections.actionNoteListFragmentToWriterFragment(noteId))
     }
 }

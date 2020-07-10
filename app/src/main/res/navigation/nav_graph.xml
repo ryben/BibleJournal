@@ -11,7 +11,7 @@
         android:label="fragment_note_list"
         tools:layout="@layout/fragment_note_list" >
         <action
-            android:id="@+id/action_noteListFragment_to_editNoteFragment"
+            android:id="@+id/action_noteListFragment_to_writerFragment"
             app:destination="@id/editNoteFragment" />
     </fragment>
     <fragment

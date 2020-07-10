@@ -3,6 +3,7 @@ package com.example.user.biblejournal.core.ui
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
 import com.example.user.biblejournal.R
 
@@ -18,6 +19,10 @@ open class BaseFragment : Fragment() {
 
     fun navigate(navId : Int) {
         navController.navigate(navId)
+    }
+
+    fun navigate(navDirection : NavDirections) {
+        navController.navigate(navDirection)
     }
 
     fun navigate(navId : Int, bundle : Bundle) {

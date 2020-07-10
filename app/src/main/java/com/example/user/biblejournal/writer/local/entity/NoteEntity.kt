@@ -10,7 +10,7 @@ import com.example.user.biblejournal.model.note.NoteState
 @Entity
 data class NoteEntity(
         @PrimaryKey(autoGenerate = true)
-        var id: Int = 0,
+        var id: Long = 0,
 
         @ColumnInfo
         var title: String? = null,

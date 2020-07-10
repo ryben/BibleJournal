@@ -25,8 +25,8 @@ class NoteListAdapter(itemClickListener : NoteListItemClickListener, notes: List
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val note = notes!![position]
-        holder.noteId = position
+        val note = notes[position]
+        holder.noteId = note.id
         holder.textTitle.text = note.title
         holder.textCreationTime.text = note.dateCreated
 
@@ -47,7 +47,7 @@ class NoteListAdapter(itemClickListener : NoteListItemClickListener, notes: List
     }
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        var noteId: Int? = null
+        var noteId: Long? = null
 
         override fun onClick(p0: View?) {
             if (noteId != null) {
@@ -65,6 +65,6 @@ class NoteListAdapter(itemClickListener : NoteListItemClickListener, notes: List
     }
 
     interface NoteListItemClickListener {
-        fun onNoteListItemClick(noteId : Int)
+        fun onNoteListItemClick(noteId : Long)
     }
 }
