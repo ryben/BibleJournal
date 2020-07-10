@@ -14,7 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.user.biblejournal.R
 import com.example.user.biblejournal.core.util.Utils
-import com.example.user.biblejournal.model.data.VerseAddress
+import com.example.user.biblejournal.reader.repository.VerseAddress
 import com.example.user.biblejournal.writer.viewmodel.WriterViewModel
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior

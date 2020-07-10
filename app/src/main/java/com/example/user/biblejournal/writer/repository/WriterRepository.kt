@@ -1,14 +1,14 @@
 package com.example.user.biblejournal.writer.repository
 
 import android.app.Application
-import com.example.user.biblejournal.model.data.LocatedVerseAddress
-import com.example.user.biblejournal.model.data.VerseAddress
-import com.example.user.biblejournal.model.data.VerseInfo
+import com.example.user.biblejournal.reader.repository.LocatedVerseAddress
+import com.example.user.biblejournal.reader.repository.VerseAddress
+import com.example.user.biblejournal.reader.repository.VerseInfo
 import com.example.user.biblejournal.database.AppDb
 import com.example.user.biblejournal.writer.local.dao.NoteDao
 import com.example.user.biblejournal.writer.local.entity.NoteEntity
-import com.example.user.biblejournal.model.BibleModel
-import com.example.user.biblejournal.model.note.NoteState
+import com.example.user.biblejournal.reader.repository.ReaderRepository
+import com.example.user.biblejournal.writer.viewmodel.NoteState
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -16,13 +16,13 @@ import io.reactivex.schedulers.Schedulers
 
 class WriterRepository(app: Application) {
     private val noteDao: NoteDao
-    private val bibleModel: BibleModel
+    private val readerRepository: ReaderRepository
     private val compositeDisposable = CompositeDisposable()
 
     init {
         val db = AppDb.getInstance(app) // TODO: Use dependency injection
         noteDao = db!!.noteDao()
-        bibleModel = BibleModel(db)
+        readerRepository = ReaderRepository(db)
     }
 
     interface RepositoryListener {
@@ -56,7 +56,7 @@ class WriterRepository(app: Application) {
     }
 
     fun readVerse(verseAddress: VerseAddress, listener: RepositoryListener) {
-        bibleModel.getVerseById(verseAddress, listener)
+        readerRepository.getVerseById(verseAddress, listener)
     }
 
     fun updateNoteState(noteEntity: NoteEntity, newState: NoteState) {
@@ -86,6 +86,6 @@ class WriterRepository(app: Application) {
     }
 
     fun findSpannables(s: CharSequence, start: Int, count: Int): List<LocatedVerseAddress> {
-        return bibleModel.findSpannables(s, start, count)
+        return readerRepository.findSpannables(s, start, count)
     }
 }

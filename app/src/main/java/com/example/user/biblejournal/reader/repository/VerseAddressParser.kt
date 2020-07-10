@@ -1,8 +1,6 @@
-package com.example.user.biblejournal.model
+package com.example.user.biblejournal.reader.repository
 
 import android.util.SparseArray
-import com.example.user.biblejournal.model.data.LocatedVerseAddress
-import com.example.user.biblejournal.model.data.VerseAddress
 import java.util.*
 import java.util.regex.Pattern
 

@@ -1,4 +1,4 @@
-package com.example.user.biblejournal.home.view.adapter
+package com.example.user.biblejournal.notelist.view.adapter
 
 import android.view.LayoutInflater
 import android.view.View

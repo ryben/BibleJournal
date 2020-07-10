@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-import com.example.user.biblejournal.model.note.NoteState
+import com.example.user.biblejournal.writer.viewmodel.NoteState
 
 @Entity
 data class NoteEntity(

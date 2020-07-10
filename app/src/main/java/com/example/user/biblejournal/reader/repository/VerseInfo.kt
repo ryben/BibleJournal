@@ -1,4 +1,4 @@
-package com.example.user.biblejournal.model.data
+package com.example.user.biblejournal.reader.repository
 
 data class VerseInfo(
         val verseAddress: VerseAddress,

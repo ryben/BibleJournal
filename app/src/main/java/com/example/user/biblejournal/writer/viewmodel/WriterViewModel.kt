@@ -1,16 +1,13 @@
 package com.example.user.biblejournal.writer.viewmodel
 
-
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MediatorLiveData
-import com.example.user.biblejournal.core.util.Utils
-import com.example.user.biblejournal.model.data.LocatedVerseAddress
-import com.example.user.biblejournal.writer.repository.WriterRepository
-import com.example.user.biblejournal.model.data.VerseAddress
-import com.example.user.biblejournal.model.data.VerseInfo
+import com.example.user.biblejournal.reader.repository.LocatedVerseAddress
+import com.example.user.biblejournal.reader.repository.VerseAddress
+import com.example.user.biblejournal.reader.repository.VerseInfo
 import com.example.user.biblejournal.writer.local.entity.NoteEntity
-import com.example.user.biblejournal.model.note.NoteState
+import com.example.user.biblejournal.writer.repository.WriterRepository
 import java.util.*
 
 class WriterViewModel(app: Application) : AndroidViewModel(app), WriterRepository.RepositoryListener {

@@ -1,9 +1,6 @@
-package com.example.user.biblejournal.model
+package com.example.user.biblejournal.reader.repository
 
 import android.util.SparseArray
-import com.example.user.biblejournal.model.data.LocatedVerseAddress
-import com.example.user.biblejournal.model.data.VerseAddress
-import com.example.user.biblejournal.model.data.VerseInfo
 import com.example.user.biblejournal.database.AppDb
 import com.example.user.biblejournal.reader.local.dao.BookNameDao
 import com.example.user.biblejournal.reader.local.dao.MaxVerseDao
@@ -15,7 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
-class BibleModel(db: AppDb) {
+class ReaderRepository(db: AppDb) {
     private val verseDao: VerseDao = db.verseDao()
     private val bookNameDao: BookNameDao = db.bookDao()
     private val maxVerseDao: MaxVerseDao = db.maxVerseDao()

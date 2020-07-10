@@ -1,4 +1,4 @@
-package com.example.user.biblejournal.model.note
+package com.example.user.biblejournal.writer.viewmodel
 
 enum class NoteState {
     NEW,

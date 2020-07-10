@@ -1,4 +1,4 @@
-package com.example.user.biblejournal.home.view
+package com.example.user.biblejournal.notelist.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.user.biblejournal.R
-import com.example.user.biblejournal.core.constants.ActivityConstants
 import com.example.user.biblejournal.core.ui.BaseFragment
 import com.example.user.biblejournal.writer.viewmodel.WriterViewModel
-import com.example.user.biblejournal.home.view.adapter.NoteListAdapter
-import com.example.user.biblejournal.writer.view.WriterFragmentArgs
+import com.example.user.biblejournal.notelist.view.adapter.NoteListAdapter
 import kotlinx.android.synthetic.main.fragment_note_list.*
 
 
