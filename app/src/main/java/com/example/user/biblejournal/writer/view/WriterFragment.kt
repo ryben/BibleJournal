@@ -42,10 +42,15 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val noteId = WriterFragmentArgs.fromBundle(requireArguments()).noteId
+        val noteId: Long = WriterFragmentArgs.fromBundle(requireArguments()).noteId
 
         writerViewModel = ViewModelProvider(activity!!).get(WriterViewModel::class.java)
-        writerViewModel.startNote(noteId)
+
+        if (noteId == -1L) {
+            writerViewModel.startNewNote()
+        } else {
+            writerViewModel.startEditNote(noteId)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -154,7 +159,6 @@ class WriterFragment : Fragment(), MyClickableSpan.ClickableSpanListener {
             true
         }
     }
-
 
 
     private fun recordCurrentNote() {

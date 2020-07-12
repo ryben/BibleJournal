@@ -9,13 +9,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.user.biblejournal.R
 import com.example.user.biblejournal.core.ui.BaseFragment
-import com.example.user.biblejournal.writer.viewmodel.WriterViewModel
 import com.example.user.biblejournal.notelist.view.adapter.NoteListAdapter
+import com.example.user.biblejournal.notelist.viewmodel.NoteListViewModel
 import kotlinx.android.synthetic.main.fragment_note_list.*
 
 
 class NoteListFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListener {
-    private lateinit var writerViewModel: WriterViewModel
+    private lateinit var noteListViewModel: NoteListViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -24,9 +24,9 @@ class NoteListFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListen
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        writerViewModel = ViewModelProvider(requireActivity()).get(WriterViewModel::class.java)
+        noteListViewModel = ViewModelProvider(requireActivity()).get(NoteListViewModel::class.java)
 
-        val notes = writerViewModel.allNotes
+        val notes = noteListViewModel.allNotes
 
         val noteListAdapter = NoteListAdapter(this, notes.value!!)
         rvNoteList.adapter = noteListAdapter
@@ -34,7 +34,7 @@ class NoteListFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListen
 
         notes.observe(viewLifecycleOwner, Observer { noteEntities -> noteListAdapter.setNotes(noteEntities) })
 
-        writerViewModel.readAllNotes()
+        noteListViewModel.readAllNotes()
 
         btnAddNote.setOnClickListener {
             navigate(R.id.action_noteListFragment_to_writerFragment)
@@ -42,6 +42,6 @@ class NoteListFragment : BaseFragment(), NoteListAdapter.NoteListItemClickListen
     }
 
     override fun onNoteListItemClick(noteId: Long) {
-        navigate(NoteListFragmentDirections.actionNoteListFragmentToWriterFragment(noteId))
+        navigate(NoteListFragmentDirections.actionNoteListFragmentToWriterFragment().setNoteId(noteId))
     }
 }

@@ -13,29 +13,16 @@ import java.util.*
 class WriterViewModel(app: Application) : AndroidViewModel(app), WriterRepository.RepositoryListener {
     private val writerRepository: WriterRepository = WriterRepository(app)
     val currentNote: MediatorLiveData<NoteEntity> = MediatorLiveData()
-    val allNotes: MediatorLiveData<List<NoteEntity>> = MediatorLiveData()
 
     val textSpannables: MediatorLiveData<List<LocatedVerseAddress>> = MediatorLiveData()
     val verseToShow = MediatorLiveData<VerseInfo>()
 
-    init {
-        allNotes.value = ArrayList()
+    fun startEditNote(noteId: Long) {
+        writerRepository.getNoteById(noteId, this)
     }
 
-    fun readAllNotes() {
-        writerRepository.readAllNotes(this)
-    }
-
-    fun startNote(noteId: Long?) {
-        if (null == noteId) {
-            currentNote.setValue(NoteEntity.newInstance())
-        } else {
-            writerRepository.getNoteById(noteId, this)
-        }
-    }
-
-    override fun onNotesRead(noteEntities: List<NoteEntity>) {
-        allNotes.value = noteEntities
+    fun startNewNote() {
+        currentNote.setValue(NoteEntity.newInstance())
     }
 
     override fun onNoteFetchedById(noteEntity: NoteEntity) {

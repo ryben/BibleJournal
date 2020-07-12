@@ -9,7 +9,7 @@
         android:id="@+id/noteListFragment"
         android:name="com.example.user.biblejournal.notelist.view.NoteListFragment"
         android:label="fragment_note_list"
-        tools:layout="@layout/fragment_note_list" >
+        tools:layout="@layout/fragment_note_list">
         <action
             android:id="@+id/action_noteListFragment_to_writerFragment"
             app:destination="@id/editNoteFragment" />
@@ -17,9 +17,10 @@
     <fragment
         android:id="@+id/editNoteFragment"
         android:name="com.example.user.biblejournal.writer.view.WriterFragment"
-        android:label="EditNoteFragment" >
+        android:label="EditNoteFragment">
         <argument
             android:name="noteId"
+            android:defaultValue="-1L"
             app:argType="long" />
     </fragment>
 </navigation>

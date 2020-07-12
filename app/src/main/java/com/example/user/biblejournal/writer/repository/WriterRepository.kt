@@ -26,23 +26,11 @@ class WriterRepository(app: Application) {
     }
 
     interface RepositoryListener {
-        fun onNotesRead(noteEntities: List<NoteEntity>)
-
         fun onNoteFetchedById(noteEntity: NoteEntity)
 
         fun onVerseRead(verseInfo: VerseInfo)
     }
 
-    fun readAllNotes(listener: RepositoryListener) {
-        compositeDisposable.add(Observable.fromCallable { noteDao.allNotes }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ result ->
-                    run {
-                        listener.onNotesRead(result)
-                    }
-                }, {}))
-    }
 
     fun getNoteById(id: Long, listener: RepositoryListener) {
         compositeDisposable.add(Observable.fromCallable { noteDao.getNoteById(id) }

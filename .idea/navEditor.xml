@@ -31,7 +31,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_noteListFragment_to_editNoteFragment">
+                            <entry key="action_noteListFragment_to_writerFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
